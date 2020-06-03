@@ -59,14 +59,25 @@ Afterwards I was told this is a simple [UPX](https://en.wikipedia.org/wiki/UPX) 
 I just placed a breakpoint at the RAM jump address gathered statically and ran the binary in no$psx. The when it got to this address, I dumped the whole RAM range and imported it in Ghidra. This is easily said but still took a while to get familiar with the breaking process in no$psx and its dumping mechanism.
 
 
+Notes on reversing MIPS
+-----------------------
+I wasn't familiar with the architecture, but it's actually fairly readable. There are a few things to know:
+
+* the most used calling convention uses $a0 to $a3 to pass arguments, the rest are passed on the stack
+* the jal instruction is used to call functions
+* the callee returns using jr $ra
+* the return values are stored in $v0 and optionnaly $v1
+* MIPS uses a very strange dual pipeline which can have instructions out-of-order in the assembly listing when a call is made
+
+![a](./step5_pipeline.png)
+
+Here, temporally, a0, a1 and a2 are set *before* ```function_with_3_args``` is called.
+
+That's basically all you need to know to start reversing MIPS :)
+
+
 Reversing the binary
 ====================
-
-Notes on MIPS
--------------
-call registers
-return register
-pipeline
 
 This program isn't too big but when reversing I like to start with what I know the program should do. From looking at the keyprovider earlier, we know that some serial stuff will be involved: we will receive a one-byte input '?' and answer a 20-byte password. In the [memory layout specification](http://problemkaputt.de/psx-spx.htm#serialportsio), we get the serial port base address: 0x1F801050. So let's first find that value in the binary and find functions which reference it. Bingo, this brings us in a function that seems to perform some action (init/read/write) depending on a parameter:
 
