@@ -110,7 +110,7 @@ This constants ... 0x7a = 'z', 0x78 = 'x', 0x64 = 'd', 0x73 = 's' ... they're st
 When mashing these in the emulator I noticed that they would be added to a circular buffer of 8 bytes and that my output password was updated.
 So we're looking at 4^8 input key possibilities to recover the database password, couldn't do it by hand.
 
-The rest seemed to be RIPEMD160 but I couldn't immediately replicate its results, so I just pulled the decompiled algorithm from Ghidra and called it a day. The algorithm is replicated [here](gist) (warning: ugly).
+The rest seemed to be RIPEMD160 but I couldn't immediately replicate its results, so I just pulled the decompiled algorithm from Ghidra and called it a day. The algorithm is replicated [here](https://gist.github.com/gquere/df4edf8f862d7e622502d1d8452cefa3) (warning: ugly).
 
 
 Recovering the key

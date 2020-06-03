@@ -129,7 +129,11 @@ Thus we can identify two parts to this challenge that will need to be idependent
 
 First part: Alaide Binary
 =========================
-This part was a bit hard because it's C++ Boost statically compiled, so there are virtual functions everywhere. You can't really tell where the original program stops and the framework starts.
+This part was a bit hard because it's C++ Boost statically compiled, so there are virtual functions everywhere. You can't really tell where the original program stops and the framework starts. I tried to use [ooanalyzer](https://insights.sei.cmu.edu/sei_blog/2019/07/using-ooanalyzer-to-reverse-engineer-object-oriented-code-with-ghidra.html) of the [pharos framework](https://github.com/cmu-sei/pharos) to separate the program from the framework, but it segfaulted after 12 hours.
+
+Anyways, I'm summing up this part because it wasn't that interesting, just a matter of understanding what's done so that its crypto may be inverted later.
+
+The message received is padded until it has the right length. Then it's scrambled and encrypted by blocks of 4 bytes by xoring it with a value derived from an initial random value read from ```/dev/urandom```. This initial value is very important and is used to when calling the contract later on, as some form of seed.
 
 
 Second part: Smartcontract
@@ -506,7 +510,7 @@ This is supposed to work as long as a is even and b is odd.
 
 Putting it all together
 =======================
-I wrote a python script to ivert all steps and bruteforce the random byte for each message. Yes, [you can see it](gist). Yes, it is ugly.
+I wrote a python script to invert all steps and bruteforce the random byte for each message. Yes, [you can see it](https://gist.github.com/gquere/99ca5cb36f8f31225d8353f82fde1c02). Yes, it is ugly.
 
 There are some false positives which are easily removed but here's what it managed to recover:
 ```
