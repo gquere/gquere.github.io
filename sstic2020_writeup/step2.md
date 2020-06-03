@@ -27,6 +27,6 @@ Let's just log as anyone on the server:
 ![a](matrix_public.png)
 
 TripleChaCha and Gwrizienn seem to have talked together. Let's investigate.
-![a](matrixçmp_chacha_gwrizienn.png)
+![a](matrix_mp_chacha_gwrizienn.png)
 
 The flag SSTIC{3e43df4fc2e11c9226bbc2a22bc12a4d083678e6a2f3e9ca2fae05e19ed42ba7} validates step2 and confirms we're on the right track!
