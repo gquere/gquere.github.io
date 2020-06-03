@@ -11,11 +11,11 @@ PCAP analysis
 =============
 When discovering PCAPs I like to look to follow the TCP streams, which can give us an idea of what's happening. Here for instance there are 3 streams, two of which are cleartext on port 80 and one that seems encrypted on port 443 ... but with no TLS handshake? That's uncommon.
 
-[!](./step4_pcap_session2.png)
+![a](./step4_pcap_session2.png)
 
 Let's look closer at TCP stream 0:
 
-[!](./step4_pcap.png)
+![a](./step4_pcap.png)
 
 Looks like an obfuscated script was injected in the page! Someone fell victim to a MitM attack and should have used HTTPS...
 
@@ -258,12 +258,12 @@ At about 25kB that's a big one. Reversing it took a lot of switching between IDA
 Import hashing
 --------------
 Although I was not familiar with this techique, it appears to be [common malware behaviour](https://www.fireeye.com/blog/threat-research/2012/11/precalculated-string-hashes-reverse-engineering-shellcode.html): the shellcode does not embed textual strings for the functions it will need to call (think open, read, close) but rather has a custom hash of all these functions, and it parses the loaded DLL address space, hashing function names until it finds the right one and saves its address for later usage:
-[!](./step4_hash.png)
+![a](./step4_hash.png)
 
 This pattern is very noticeable in a static analysis, because it needs to be repeated for each API function the shellcode will need.
 
 It's possible to extract all function names with a dynamic analysis, but it's very time consuming. Instead, I copied the hashing algorithm into a hash bruteforcer in python and fed it [all DLL names and all DLL exported functions](https://www.win7dll.info/ws2_32_dll.html) I could find:
-[!](./step4_dll_exports.png)
+![a](./step4_dll_exports.png)
 
 ```python
 #!/usr/bin/env python3
@@ -317,7 +317,7 @@ Second crypto
 -------------
 The second crypto blob is the interesting one as it's the one used over all files read from the victim's filesystem and uses a fixed key derived from the earlier AES blob.
 
-[!](./step4_coconut.png)
+![a](./step4_coconut.png)
 
 In order to identify the algorithm, I once again googled its lookup table. Only a few results yelded a very obscure algorithm: [COCONUT98](https://books.google.fr/books?id=i1MDsloDRs4C&pg=PA270&lpg=PA270&dq=6abf71&source=bl&ots=BOleGHBl7X&sig=ACfU3U06Z3U9RtL-BCuVPldAfKdn3gluUw&hl=en&sa=X&ved=2ahUKEwjM2dDQkObpAhWRCOwKHck4DmwQ6AEwD3oECAoQAQ#v=onepage&q=6abf71&f=false). It's a Feistel network but a rather strange one at that: the decryption key is not the encryption key, which is usually the case for Feistel networks!
 

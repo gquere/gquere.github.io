@@ -483,7 +483,7 @@ Memort slot 0 = 00000000 99EB8BB96FF8580A 5245205230305421 B42CC50912EA7786 0000
 
 
 After a bit of reversing, we end up with a Solidity code similar to this:
-```
+```javascript
 pragma solidity >=0.4.22 <0.7.0;
 
 
@@ -578,7 +578,7 @@ So actually not a lot going on here that will need to be inverted :
 
 The first two are trivial but the last one not so much. I started looking around in Sagemath, actually spent quite a bit of time in there but I think it cannot be done with Sage. We have directions to [this paper](https://raw.githubusercontent.com/fishilico/shared/master/latex/mathematics/modular_arithmetic.rst) (which I want to thank the author for including, couldn't have done without it) and it explains rather well how we'll be solving this equation:
 
-[!](./step6_paper.png)
+![a](./step6_paper.png)
 
 Yes, I do not like it either. But this was surprisingly easy to translate to code:
 ```python
