@@ -52,7 +52,7 @@ Oh well. This is my number 1 loss of time on this challenge: finding the appropr
 
 Unpacking the binary
 ====================
-I opened the binary aaaaaaand .... it's packed! I tried to follow a bit what was happening but it seemed like too much effort. So I just grabbed the jump address and went on my merry way to a dynamic approach.
+I opened the binary aaaaaaand ... it's packed! I tried to follow a bit what was happening but it seemed like too much effort. So I just grabbed the jump address and went on my merry way to a dynamic approach.
 
 Afterwards I was told this is a simple [UPX](https://en.wikipedia.org/wiki/UPX) executable from which the ```UPX!``` strings had been removed. Note to myself: learn to manually unpack UPX, as it becomes more and more common in CTFs.
 
@@ -61,6 +61,7 @@ I just placed a breakpoint at the RAM jump address gathered statically and ran t
 
 Reversing the binary
 ====================
+
 Notes on MIPS
 -------------
 call registers
@@ -70,13 +71,16 @@ pipeline
 This program isn't too big but when reversing I like to start with what I know the program should do. From looking at the keyprovider earlier, we know that some serial stuff will be involved: we will receive a one-byte input '?' and answer a 20-byte password. In the [memory layout specification](http://problemkaputt.de/psx-spx.htm#serialportsio), we get the serial port base address: 0x1F801050. So let's first find that value in the binary and find functions which reference it. Bingo, this brings us in a function that seems to perform some action (init/read/write) depending on a parameter:
 
 This portion to write a byte:
+
 ![a](./step5_screensaver_write_byte_serial.png)
 
 This portion to read a byte:
+
 ![a](./step5_screensaver_read_byte_serial.png)
 
 
 The caller to this function seems to be our main function, as everything's placed in a while() loop:
+
 ![a](./step5_screensaver_main.png)
 
 At the very top of the loop, we can observe that the program will read if there is any incoming data on the serial port, read one byte, compare it to '?' and if so send 20 bytes of a memory address back on the serial.
@@ -84,17 +88,21 @@ At the very top of the loop, we can observe that the program will read if there 
 At this point I thought I had finished the challenge, so emulated sending the '?' byte in the debugger and got a key which I tried ... and it failed. There had to be more to this challenge :(
 
 So I took a look at the rest of the loop and there were a bunch of magic numbers:
+
 ![a](./step5_screensaver_magics.png)
 
 These are [nothing-up-my-sleeve numbers](https://en.wikipedia.org/wiki/Nothing-up-my-sleeve_number) commonly found in crypto. Oh noes, not again!
 
 I traced these to SHA1/RIPEMD which matched the expected output length. But I was somehow stuck on the possible input for a while because i'm pretty sure this code disables the joystick and that's the only input I could think of:
+
 ![a](./step5_screensaver_disable_joystick.png)
 
 Looking at the flow graph is oftentimes more revealing than the decompilation output which was absolute garbage here:
+
 ![a](./step5_screensaver_main_flow.png)
 
 We can see our serial operations at the top of the main loop (colored in blue), but then there's an interesting section which (in yellow) that I've reorganized to make it clearer:
+
 ![a](./step5_screensaver_keys.png)
 
 This constants ... 0x7a = 'z', 0x78 = 'x', 0x64 = 'd', 0x73 = 's' ... they're strangely familiar... It took a while to click but these are the keyboard emulation values for the playstation's main 4 buttons. So they correspond to square, circle, cross and triangle.
@@ -115,4 +123,5 @@ hashcat64.bin -m 13400 keepass.hash candidates.txt
 ```
 
 With the key to the database I could finally open it and I got the password to CeriseLiquide's Megolm key:
+
 ![a](./step5_keepass_opened.png)
