@@ -22,11 +22,17 @@ Looks like an obfuscated script was injected in the page! Someone fell victim to
 
 Deobfuscating the script
 ========================
-```vbs
+It looked quite ugly but being VBS is actually rather easy to deobfuscate.
+
+First, there are constants:
+```
 Dim IIIIIIIIIIIIIIIIIIIIIIIII : IIIIIIIIIIIIIIIIIIIIIIIII = Array(&HF6,&H87,&HFB,&H6,&H3F,&H7E,&HA6,&HC2,&H4A,&H9B,&H3C,&HF7,&HC7,&HE7,&HDD,&H28,&HAC,&H8A,&H95,&H45,&H99,&H1,...):
 Dim IIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII = navigator.userAgent
+```
 
+Then there's a class defined:
+```vb
 Class IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
     Public IIIIIIIIIIIIIIII,IIIIIIIIIIIIIII
     Public IIIIIIIIIIIIIIIIIIIIII
@@ -111,6 +117,18 @@ Call IIIIIIIIIIIIIIIIIIIIIII.IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII(II
     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII(52+IIIIIIIIIIIIIIIIIIIIIIIIIIIIII) = ChrW((IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII(52+IIIIIIIIIIIIIIIIIIIIIIIIIIIIII*2) + (IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII(52+IIIIIIIIIIIIIIIIIIIIIIIIIIIIII*2+1) * &h100)))
   Next
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII = join(IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,"")
+```
+
+
+These two first functions are used to decrypt the big array at the beginning. I failed to identify the algorithm, but it seems that the first fuction is a key scheduling algorithm and the second one is the actual decryption function. One can notice that the decryption key is the user agent of the navigator used by the victim, which we can find in the PCAP: "Mozilla/4.0 (compatible; MSIE 5.0; Windows 98; DigExt)". I merely replaced that in a shortened script of my own and dumped the decrypted array to a file.
+
+Once decrypted, the big blob at the beginning contains a few readable strings at the beginning, followed by a huge payload.
+```
+"v:shape_shape_vgRuntimeStyledashstylearrayitemlength｠⑔慄쀱썈襕工ߩ"...
+```
+
+And finally, a function ```a()``` called from the javascript:
+```
 Function a()
     Dim IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIII,IIIIIIIIIIIII,IIIII,IIII,IIIIIIIII,IIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIII,IIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,II,IIIIIIIIIIIIII
     ReDim IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII(42)
@@ -224,13 +242,6 @@ Function a()
 end Function
 ```
 
-This looks quite ugly but is actually rather easy to deobfuscate. The first two functions are used to decrypt the big array at the beginning. I failed to identify the algorithm, but it seems that the first fuction is a key scheduling algorithm and the second one is the actual decryption function. One can notice that the decryption key is the user agent of the navigator used by the victim, which we can find in the PCAP: "Mozilla/4.0 (compatible; MSIE 5.0; Windows 98; DigExt)". I merely replaced that in a shortened script of my own and dumped the decrypted array to a file.
-
-Once decrypted, the big blob at the beginning contains a few readable strings at the beginning, followed by a huge payload.
-```
-"v:shape_shape_vgRuntimeStyledashstylearrayitemlength｠⑔慄쀱썈襕工ߩ"...
-```
-
 I spent way too much time understanding the vulnerability abused in function ```a()```. The decrypted strings helped finding the source of the exploit: it seems to be an IE5 port of CVE-2013-2551 which was discovered by [Vupen](https://web.archive.org/web/20130617105700/http://www.vupen.com/blog/20130522.Advanced_Exploitation_of_IE10_Windows8_Pwn2Own_2013.php). It's a heap exploit so I was afraid that the payload would be different than a normal shellcode because of that. This was time spent uselessly as I discovered after a while that the big payload is just a regular shellcode... Could've shaved a loooot of time had I directly jumped to the shellcode.
 
 
@@ -308,9 +319,13 @@ This allowed me to deduce the behaviour I previously presented.
 
 VirtualAlloc() and first crypto
 -------------------------------
-Googling the 4 lookup tables revealed that the crypto is AES. Doing dynamic analysis over the course of days, it seemed to be fully predictable so I just ignored it.
+There seems to be some tricky memory things going on: the shellcode calls ```VirtualAlloc``` then triggers an exception. This really impaired the dynamic analysis process because this old version of OllyDBG cannot trace SEH in the kernel.
 
-I'm sure there are some pretty clever tricks here, but I wasn't able to follow the SEH in OllyDBG and I'm not experienced enough to do it statically.
+Googling the 4 lookup tables revealed that the huge crypto blob is a linearized AES. It represents a good 80% of all the shellcode and is actually so big that there's no way I can reproduce it in picture.
+
+Doing dynamic analysis over the course of days, it seemed to be fully predictable and always generated the same output buffer so I just ignored it.
+
+I'm sure there are some pretty clever tricks here, but I wasn't able to follow the SEH in OllyDBG when it leaves userspace and I'm not experienced enough to do it statically. Here's a reason to read other writeups ;)
 
 
 Second crypto
@@ -321,5 +336,8 @@ The second crypto blob is the interesting one as it's the one used over all file
 
 In order to identify the algorithm, I once again googled its lookup table. Only a few results yelded a very obscure algorithm: [COCONUT98](https://books.google.fr/books?id=i1MDsloDRs4C&pg=PA270&lpg=PA270&dq=6abf71&source=bl&ots=BOleGHBl7X&sig=ACfU3U06Z3U9RtL-BCuVPldAfKdn3gluUw&hl=en&sa=X&ved=2ahUKEwjM2dDQkObpAhWRCOwKHck4DmwQ6AEwD3oECAoQAQ#v=onepage&q=6abf71&f=false). It's a Feistel network but a rather strange one at that: the decryption key is not the encryption key, which is usually the case for Feistel networks!
 
-I followed the paper's instructions to have a decryption program, which you'll find here in full: [COCONUT98 encrypt/decrypt](gist). Note that I've had to patch the pyfinite library to add the necessary field.
+![a](./step4_coconut_algo.png)
+
+I followed the paper's instructions to have a decryption program, which you'll find here in full: [encrypt/decrypt with COCONUT98](gist). Note that I've had to patch the pyfinite library to add the necessary field.
+
 A simple breakpoint at the start of the algorithm enabled me to recover the key, which I plugged in the algorithm, and voilà: we've recovered the victim's exfiltrated files!
