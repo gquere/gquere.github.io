@@ -1,7 +1,8 @@
 Challenge information
 ---------------------
-Challenge type: Memory forensics
-Rating: Easy    2-3 hours
+
+* Challenge type: Memory forensics
+* Rating: Easy    2-3 hours
 
 Getting the memory dump
 -----------------------
@@ -26,7 +27,7 @@ dump
 The [LiME](https://github.com/504ensicslabs/lime) project is a memory extractor for Linux. It's used to create memory snapshots of a running system.
 
 If you're accustomed to CTFs you may want to rush into [volatility](https://github.com/volatilityfoundation/volatility), but let's take a look at the script first (snipped for brevity's sake):
-```
+```bash
 # Compile LiME kernel module against target kernel
 if [ ! -d "${script_dir}/LiME" ]; then
     echo "LiME not found. Cloning it..."
@@ -54,9 +55,9 @@ Ok so the script is probably in someone's memory forensics toolkit. It just grab
 There's one thing to note here: ```compress=1```. Thus we'll need to unzip the generated archive to get to the raw memory.
 
 ```
- gquere@sandbox  ~/Bureau/shared/ctf/sstic2020/real/step1/dump/extracted  file memory
+ gquere@sandbox  ~/sstic2020/step1/dump/extracted  file memory
 memory: zlib compressed data
- gquere@sandbox  ~/Bureau/shared/ctf/sstic2020/real/step1/dump/extracted  zlib-flate -uncompress < memory > memory_unzipped
+ gquere@sandbox  ~/sstic2020/step1/dump/extracted  zlib-flate -uncompress < memory > memory_unzipped
 ```
 
 
@@ -109,7 +110,7 @@ python vol.py --file=/mnt/cdata/ctf/dump/extracted/memory_unzipped --profile=Lin
 I tweaked the output a bit in vim to get the filename first and the the inode, and deleted files that I wasn't going to look at on the first run (/sys, /proc, /run, /usr, /lib ...).
 
 Then I ran a custom script to dump the remaining files (mostly /etc, /home and /tmp):
-```
+```bash
 #!/bin/bash
 
 OUT_PATH="/mnt/cdata/ctf/dump/extracted/fs"
@@ -136,7 +137,7 @@ done < files
 ```
 
 In the user's home there's a backup script ```backup.sh```:
-```
+```bash
 #! /bin/bash
 # Custom backup script
 

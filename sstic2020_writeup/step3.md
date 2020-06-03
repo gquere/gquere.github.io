@@ -1,9 +1,11 @@
 Challenge information
 ---------------------
-Challenge type: Reverse
-Rating: Easy    2h
 
-Our inputs for this challenge are a file containing some sort of hashes, a wordlist of 26 entries and a linux binary. Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password.
+* Challenge type: Reverse
+* Rating: Easy    2h
+
+* Challenge inputs:
+** Our inputs for this challenge are a file containing some sort of hashes, a wordlist of 26 entries and a linux binary. Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password.
 
 The hashes file looks like it is (somewhat) (badly) encrypted. We can barely make out that it's probably a hashing algorithm with a salt and a work factor:
 ```
@@ -12,7 +14,7 @@ chat:$sstic$ad6w.742e=#1!2=&$t/3?v0.,SzfPIDt~VhWXr]SCECfv5j2rZeob2Z.@4^pgqdU[AGM
 ```
 
 The simplest way of getting the password is to just let it bruteforce from the wordlist. After all there's only 26^3 combinations to try. We've got a toy example to get a sense of the timings:
-```
+```bash
 time ./show_password hashes.txt meteo
 Password for meteo: AlloBruineCrachin
 Good password ☀
@@ -107,7 +109,7 @@ gef➤  x/s $rbp
 Got myself a cleartext hash! Surely this will save me some computing time!
 
 Here's the script I wrote to bruteforce the password:
-```
+```python
 #!/usr/bin/env python3
 import argon2
 import base64

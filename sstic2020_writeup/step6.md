@@ -1,14 +1,12 @@
 Challenge information
 =====================
-Challenge type: Reverse
-Rating: Hard    20-30 hours
-
-Challenge inputs:
-
-* a 64-bits ELF binary ```alaide``` and some explanations surrounding it, namely that it's a smartcontract provider
-* some sort of memory dump ```contract_memory.txt``` reproduced below
-* the next megolm key dump ```fraiseglacee.megolm_keys.txt```
-* a link to a mathematics paper on the subject of modular arithmetics
+* Challenge type: Reverse
+* Rating: Hard    20-30 hours
+* Challenge inputs:
+** a 64-bits ELF binary ```alaide``` and some explanations surrounding it, namely that it's a smartcontract provider
+** some sort of memory dump ```contract_memory.txt``` reproduced below
+** the next megolm key dump ```fraiseglacee.megolm_keys.txt```
+** a link to a mathematics paper on the subject of modular arithmetics
 
 The contract memory dump looks like this (rearranged using a rule I'll describe afterwards):
 
@@ -51,7 +49,7 @@ Memory slot AF2AFAF35AD6DA1368C28C91BA52A84B6FC26E5AA0D9B26DC4FA0373E4D12C30 = 0
 Running the binary after reading its help menu gives us this output:
 
 ```
- gquere@sandbox  ~/Bureau/shared/ctf/sstic2020/real/step6  ./alaide local ABCD
+ gquere@sandbox  ~/sstic2020/step6  ./alaide local ABCD
 Deploying...
 Smart contract has been deployed.
 Sending message part 1/32 ...
@@ -100,7 +98,7 @@ After fiddling a bit in the binary's disassembly there's a static debug mode. I 
 The new output is:
 
 ```
- gquere@sandbox  ~/Bureau/shared/ctf/sstic2020/real/step6/test  ./alaide_patch_debug local ABCD       
+ gquere@sandbox  ~/sstic2020/step6/test  ./alaide_patch_debug local ABCD
 Deploying...
 Smart contract has been deployed.
 Deployment transaction hash is fff91f84f6e1e00446a289bf1dfcec678bb1c743210e7194586fc8e6e2087ef8
@@ -268,23 +266,23 @@ The constructor
 ---------------
 
 Let's take a look at the constructor first using the decompiled output of ethervm:
-```
+```javascript
 contract Contract {
     function main() {
         memory[0x40:0x60] = 0x80;
         var var0 = msg.value;
-    
+
         if (var0) { revert(memory[0x00:0x00]); }
-    
+
         var temp0 = memory[0x40:0x60];
         var0 = temp0;
         var temp1 = code.length - 0x06c0;
         var var1 = temp1;
         memory[var0:var0 + var1] = code[0x06c0:0x06c0 + var1];
         memory[0x40:0x60] = var1 + var0;
-    
+
         if (var1 < 0x20) { revert(memory[0x00:0x00]); }
-    
+
         storage[0x00] = (storage[0x00] & ~0xffffffff) | 0x00;
         storage[0x00] = ((memory[var0:var0 + 0x20] ~ 0x4d30442053515541) & 0xffffffffffffffff) * 0x0100 ** 0x04 | (storage[0x00] & ~(0xffffffffffffffff * 0x0100 ** 0x04));
         storage[0x00] = (storage[0x00] / 0x0100 ** 0x04 & 0xffffffffffffffff) * 0x0100 ** 0x14 | (storage[0x00] & ~(0xffffffffffffffff * 0x0100 ** 0x14));
@@ -302,18 +300,18 @@ The program
 -----------
 
 Decompiling the second part is as ugly at first sight:
-```
+```javascript
 contract Contract {
     function main() {
         memory[0x40:0x60] = 0x80;
         var var0 = msg.value;
-    
+
         if (var0) { revert(memory[0x00:0x00]); }
-    
+
         if (msg.data.length < 0x04) { revert(memory[0x00:0x00]); }
-    
+
         var0 = msg.data[0x00:0x20] >> 0xe0;
-    
+
         if (0xb5b6d2a8 > var0) {
             if (var0 == 0x26987b60) {
                 // Dispatch table entry for currentIndex()
@@ -342,9 +340,9 @@ contract Contract {
             var1 = 0x0132;
             var2 = 0x04;
             var var3 = msg.data.length - var2;
-        
+
             if (var3 < 0x40) { revert(memory[0x00:0x00]); }
-        
+
             func_0105(var2, var3);
             stop();
         } else if (var0 == 0xd1e8507b) {
@@ -352,9 +350,9 @@ contract Contract {
             var1 = 0x0161;
             var2 = 0x04;
             var3 = msg.data.length - var2;
-        
+
             if (var3 < 0x20) { revert(memory[0x00:0x00]); }
-        
+
             var2 = func_014B(var2, var3);
             var temp4 = memory[0x40:0x60];
             memory[temp4:temp4 + 0x20] = var2 & 0xffffffffffffffffffffffffffffffff;
@@ -378,17 +376,17 @@ contract Contract {
             return memory[temp9:temp9 + (temp8 + 0x20) - temp9];
         } else { revert(memory[0x00:0x00]); }
     }
-    
+
     function func_0105(var arg0, var arg1) {
         var temp0 = arg0;
         arg0 = msg.data[temp0:temp0 + 0x20] & 0xffffffffffffffff;
         arg1 = msg.data[temp0 + 0x20:temp0 + 0x20 + 0x20] & 0xff;
-    
+
         if (storage[0x00] & 0xffffffff >= 0x20) { revert(memory[0x00:0x00]); }
-    
+
         var var0 = arg1 & 0xff;
         var var1 = 0x00;
-    
+
         if (var1 & 0xff >= 0x08) {
         label_03AC:
             var1 = 0x03bb;
@@ -407,26 +405,26 @@ contract Contract {
             arg0 = arg0 ~ ((temp4 & 0xffffffffffffffff) << (temp3 * 0x08 & 0xff));
             var0 = (((temp4 & 0xffffffffffffffff) << 0x01) & 0xfe) | ((temp4 & 0xffffffffffffffff) >> 0x07);
             var1 = temp3 + 0x01;
-        
+
             if (var1 & 0xff >= 0x08) { goto label_03AC; }
             else { goto label_035F; }
         }
     }
-    
+
     function func_014B(var arg0, var arg1) returns (var arg0) {
         arg0 = msg.data[arg0:arg0 + 0x20];
         memory[0x20:0x40] = 0x01;
         memory[0x00:0x20] = arg0;
         return storage[keccak256(memory[0x00:0x40])] & 0xffffffffffffffffffffffffffffffff;
     }
-    
+
     function currentIndex() returns (var r0) { return storage[0x00] & 0xffffffff; }
-    
+
     function func_0215() returns (var r0) { return storage[0x00] / 0x0100 ** 0x14 & 0xffffffffffffffff; }
-    
+
     function func_022F() {
         var var0 = 0x00;
-    
+
         if (var0 >= 0x40) {
         label_0317:
             return;
@@ -435,12 +433,12 @@ contract Contract {
             var var1 = storage[0x00] / 0x0100 ** 0x14 & 0xffffffffffffffff & storage[0x00] / 0x0100 ** 0x0c & 0xffffffffffffffff;
             var var2 = var1;
             var var3 = 0x01;
-        
+
             if (var3 >= 0x40) {
             label_02A9:
                 storage[0x00] = ((((storage[0x00] / 0x0100 ** 0x14 & 0xffffffffffffffff) >> 0x01) | ((var2 & 0xffffffffffffffff) << 0x3f)) & 0xffffffffffffffff) * 0x0100 ** 0x14 | (storage[0x00] & ~(0xffffffffffffffff * 0x0100 ** 0x14));
                 var0 = var0 + 0x01;
-            
+
                 if (var0 >= 0x40) { goto label_0317; }
                 else { goto label_0240; }
             } else {
@@ -448,15 +446,15 @@ contract Contract {
                 var temp0 = var3;
                 var2 = var2 ~ ((var1 & 0xffffffffffffffff) >> temp0);
                 var3 = temp0 + 0x01;
-            
+
                 if (var3 >= 0x40) { goto label_02A9; }
                 else { goto label_0288; }
             }
         }
     }
-    
+
     function func_0534() returns (var r0) { return storage[0x00] / 0x0100 ** 0x04 & 0xffffffffffffffff; }
-    
+
     function func_054E() returns (var r0) { return storage[0x00] / 0x0100 ** 0x0c & 0xffffffffffffffff; }
 }
 ```
@@ -509,15 +507,15 @@ contract Storage {
     function currentIndex() public view returns (uint32) {
         return counter;
     }
-    
+
     function getXored() public view returns (uint64) {
         return xored;
     }
-    
+
     function getReroot() public view returns (uint64) {
         return reroot;
     }
-    
+
     function getUpdateval() public view returns (uint64) {
         return updateval;
     }
@@ -532,7 +530,7 @@ contract Storage {
     /* STORE MESSAGE *******************************************/
     function do_updateval() private {
         uint256 i = 0;
-        
+
         while (i < 64) {
             uint64 var1 = updateval & reroot;
             uint64 var2 = var1;
@@ -546,25 +544,25 @@ contract Storage {
             i++;
         }
     }
-    
-    
+
+
     function storeMessage(uint64 message, uint8 xorbyte) public {
-        
+
         if (counter >= 32) {
             revert();
         }
-        
+
         uint64 xorval = xorbyte;
         uint8 i = 0;
-        
+
         while (i < 8) {
             message = message ^ (xorval << (i * 8));                        /* first xor with random byte */
             xorval = ((xorval << 1) & 0xfe) | (xorval >> 7);
             i++;
         }
-        
+
         do_updateval();
-        
+
         uint64 bla = message ^ updateval;                                   /* second xor with deterministic value */
         states[counter] = (bla * 0x854e9fb4699ed8f22fd89ebe3f17f7f6 * bla + bla * 0xd677105721b51a080288a52f7aa48517); /* quadratic equation */
         counter++;
@@ -583,7 +581,7 @@ The first two are trivial but the last one not so much. I started looking around
 [!](./step6_paper.png)
 
 Yes, I do not like it either. But this was surprisingly easy to translate to code:
-```
+```python
 # MODULAR QUADRATIC EQUATION SOLVER ############################################
 def compute_next_sqrt(prev_sqrt, x, N):
     if x % (2**N) == (prev_sqrt * prev_sqrt) % (2**N):

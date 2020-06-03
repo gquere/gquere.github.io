@@ -1,12 +1,15 @@
-Challenge type: Reverse
-Rating: Medium              25 hours
+Challenge Information
+=====================
 
-Challenge inputs:
+* Challenge type: Reverse
+* Rating: Medium              25 hours
 
-* an official keepass binary
-* a keepass [key provider](https://keepass.info/help/v1_dev/plg_keyprov.html)
-* a keepass encrypted database of passwords
-* an ISO file
+* Challenge inputs:
+
+** an official keepass binary
+** a keepass [key provider](https://keepass.info/help/v1_dev/plg_keyprov.html)
+** a keepass encrypted database of passwords
+** an ISO file
 
 
 Key provider

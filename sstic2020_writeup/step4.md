@@ -1,10 +1,10 @@
 Challenge information
 =====================
-Challenge type: Reverse
-Rating: Hard            50 hours
-Challenge inputs:
 
-* PCAP file
+* Challenge type: Reverse
+* Rating: Hard            50 hours
+* Challenge inputs:
+** PCAP file
 
 
 PCAP analysis
@@ -22,8 +22,7 @@ Looks like an obfuscated script was injected in the page! Someone fell victim to
 
 Deobfuscating the script
 ========================
-```
-
+```vbs
 Dim IIIIIIIIIIIIIIIIIIIIIIIII : IIIIIIIIIIIIIIIIIIIIIIIII = Array(&HF6,&H87,&HFB,&H6,&H3F,&H7E,&HA6,&HC2,&H4A,&H9B,&H3C,&HF7,&HC7,&HE7,&HDD,&H28,&HAC,&H8A,&H95,&H45,&H99,&H1,...):
 Dim IIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII = navigator.userAgent
@@ -266,7 +265,7 @@ This pattern is very noticeable in a static analysis, because it needs to be rep
 It's possible to extract all function names with a dynamic analysis, but it's very time consuming. Instead, I copied the hashing algorithm into a hash bruteforcer in python and fed it [all DLL names and all DLL exported functions](https://www.win7dll.info/ws2_32_dll.html) I could find:
 [!](./step4_dll_exports.png)
 
-```
+```python
 #!/usr/bin/env python3
 import sys
 

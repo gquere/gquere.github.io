@@ -1,7 +1,8 @@
 Challenge Information
 ---------------------
-Challenge type: Forensics ... kinda?
-Rating: Easy    2-3 hours
+
+* Challenge type: Forensics ... kinda?
+* Rating: Easy    2-3 hours
 
 Installing Matrix-Synapse
 -------------------------
@@ -11,9 +12,7 @@ Looking into the database we can conclude it's a [matrix-synapse](https://github
 
 We'll need to install it and import the database.
 
-I didn't really take notes of this, I mainly followed the [installation instructions](https://github.com/matrix-org/synapse/blob/master/INSTALL.md).
-
-Then configured it to use psql according to [this documentation](https://github.com/matrix-org/synapse/blob/master/docs/postgres.md).
+I didn't really take notes of this, I mainly followed the [installation instructions](https://github.com/matrix-org/synapse/blob/master/INSTALL.md). Then configured it to use psql according to [this documentation](https://github.com/matrix-org/synapse/blob/master/docs/postgres.md).
 
 I didn't want to crack the users passwords because it's bcrypt with a work factor of 10 and I know better than trying to run even the simplest of dictionnaries on my antique machine, so I just replaced them all with a hash I generated:
 ```
