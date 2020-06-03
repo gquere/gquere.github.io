@@ -8,9 +8,9 @@ I'm not spoiling you the technologies involved yet, they're quite fun and it's a
 
 Here are the 6 steps:
 
-* [Step 1]: Forensics / Easy
-* [Step 2]: Forensics / Easy
-* [Step 3]: Reverse / Easy
-* [Step 4]: Reverse / Hard
-* [Step 5]: Reverse / Medium
-* [Step 6]: Reverse / Hard
+* [Step 1: Forensics / Easy](./step1)
+* [Step 2: Forensics / Easy](./step2)
+* [Step 3: Reverse / Easy](./step3)
+* [Step 4: Reverse / Hard](./step4)
+* [Step 5: Reverse / Medium](./step5)
+* [Step 6: Reverse / Hard](./step6)
