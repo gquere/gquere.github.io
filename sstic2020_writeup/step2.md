@@ -29,4 +29,6 @@ Let's just log as anyone on the server:
 TripleChaCha and Gwrizienn seem to have talked together. Let's investigate.
 ![a](matrix_mp_chacha_gwrizienn.png)
 
-The flag SSTIC{3e43df4fc2e11c9226bbc2a22bc12a4d083678e6a2f3e9ca2fae05e19ed42ba7} validates step2 and confirms we're on the right track!
+The flag ```SSTIC{3e43df4fc2e11c9226bbc2a22bc12a4d083678e6a2f3e9ca2fae05e19ed42ba7}``` validates step2 and confirms we're on the right track!
+
+From now on, all flags will be used as the passwords to import users' [Matrix megolm keys](https://matrix.org/docs/guides/end-to-end-encryption-implementation-guide/). This was a really fun way to self-contain all flags to the initial challenge, congrats to the authors on this one, it made the hunting quite playful!
