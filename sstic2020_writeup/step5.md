@@ -3,13 +3,11 @@ Challenge Information
 
 * Challenge type: Reverse
 * Rating: Medium              25 hours
-
 * Challenge inputs:
-
-** an official keepass binary
-** a keepass [key provider](https://keepass.info/help/v1_dev/plg_keyprov.html)
-** a keepass encrypted database of passwords
-** an ISO file
+    * an official keepass binary
+    * a keepass [key provider](https://keepass.info/help/v1_dev/plg_keyprov.html)
+    * a keepass encrypted database of passwords
+    * an ISO file
 
 
 Key provider

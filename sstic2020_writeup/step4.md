@@ -4,7 +4,7 @@ Challenge information
 * Challenge type: Reverse
 * Rating: Hard            50 hours
 * Challenge inputs:
-** PCAP file
+    * PCAP file
 
 
 PCAP analysis
@@ -249,9 +249,9 @@ At about 25kB that's a big one. Reversing it took a lot of switching between IDA
 * VirtualFree()
 * create a socket, connect to it
 * loop over all files in C:\
-** open the file, read the file into a buffer
-** do some crypto on the buffer using a 5th LUT
-** send the encrypted buffer over the socket
+    * open the file, read the file into a buffer
+    * do some crypto on the buffer using a 5th LUT
+    * send the encrypted buffer over the socket
 * close the socket
 
 

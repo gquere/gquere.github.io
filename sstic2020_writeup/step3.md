@@ -1,11 +1,18 @@
 Challenge information
----------------------
+=====================
 
 * Challenge type: Reverse
 * Rating: Easy    2h
-
 * Challenge inputs:
-** Our inputs for this challenge are a file containing some sort of hashes, a wordlist of 26 entries and a linux binary. Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password.
+    * a file containing some sort of hashes
+    * a wordlist of 26 entries
+    * a linux binary
+
+
+Getting the hash
+================
+
+Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password.
 
 The hashes file looks like it is (somewhat) (badly) encrypted. We can barely make out that it's probably a hashing algorithm with a salt and a work factor:
 ```
@@ -49,7 +56,7 @@ Hey Argon2, that's kinda what I was expecting! Let's set a breakpoint in gdb (ki
 gef➤  b argon2::argon2::verify_encoded_ext
 Breakpoint 3 at 0x555555562b90
 gef➤  run hashes.txt chat
-Starting program: /media/sf_shared/ctf/sstic2020/real/step3/synapse_data/show_password hashes.txt chat
+Starting program: /sstic2020/step3/synapse_data/show_password hashes.txt chat
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 Password for chat: abc
