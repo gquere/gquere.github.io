@@ -261,7 +261,7 @@ The shellcode
 =============
 At about 25kB that's a big one. Reversing it took a lot of switching between IDA for static analysis and OllyDBG for dynamic analysis. I wish I could tell you exactly how it works, but I'm not sure. I also wish I could convey how hard it was for me to reverse it, but I can't do that either. So I'm taking a major shortcut in this writeup, and I'm just going to list what I think it does. Here's the [full shellcode](https://gist.github.com/gquere/f6e2f948f45d45ab3c07d43c3c66d50d) if you want to play along.
 
-* Save functions needed later by doing some import hashing
+* Saves functions needed later by doing some import hashing
 * VirtualAlloc() and SEH shenanigans
 * a huge crypto part (uses mov, xor, shr instructions) that uses 4 Lookup Tables (LUT)
 * VirtualFree()
@@ -271,6 +271,8 @@ At about 25kB that's a big one. Reversing it took a lot of switching between IDA
     * does some crypto on the buffer using a 5th LUT
     * sends the encrypted buffer over the socket
 * closes the socket
+
+![a](./step4_shellcode.png)
 
 
 Import hashing
