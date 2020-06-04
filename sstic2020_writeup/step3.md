@@ -16,7 +16,7 @@ Challenge information
 Getting the hash
 ================
 
-Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password using the provided binary.
+Per the instructions we need to find a 3-words password combined from the wordlist that somehow recovers the chat password using the provided binary.
 
 The hashes file looks like it is (somewhat) (badly) encrypted. We can barely distinguish that it's a hashing algorithm with a salt and a work factor:
 ```
@@ -49,7 +49,7 @@ sys	0m12,282s
 
 Uh oh... seems like my CPU is way too weak to solve this challenge this way: a success takes more than 6 seconds and it doesn't have enough cores to meaningfully parallelize. So this approach would take a bunch of hours to complete...
 
-Another problem is that ```show_password``` is a Rust binary, which are a notorious mess to reverse. I really didn't want to do that. So I first loaded it in gdb and looked at the functions:
+Another problem is that ```show_password``` is a Rust binary, which are a notorious mess to reverse. I really didn't want to do that. So I first loaded it in gdb and looked at the defined functions:
 ```
 argon2::argon2::hash_encoded
 argon2::argon2::verify_encoded_ext
@@ -121,6 +121,7 @@ gef➤  x/s $rbp
 
 Got myself a cleartext hash! Surely this will save me some computing time!
 
+
 Cracking the hash
 =================
 
@@ -158,6 +159,6 @@ We can import Gwrzienn's Megolm key using this password, and this gives us acces
 
 ![a](./step3_svh_room.png)
 
-All that we've got to start is a PCAP file and ... a windows 98 tip. Buckle up, for the next one is a beast.
+All that we've got to start the next step is a PCAP file and ... a windows 98 tip. Buckle up, for the next one is a beast.
 
 Next part: [step 4](./step4)
