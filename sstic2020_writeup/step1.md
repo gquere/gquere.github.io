@@ -187,3 +187,5 @@ openssl enc -d -aes256 -iv 5d115a29d1e70fc7cef8441e3c4fcb53 -K ed358af6ce822480d
 ```
 
 And in this dump we get our first flag: ```SSTIC{f8693a5a340b67c4ac13abb93e57da55b935577fc76cbe14c223fb5912ccc795}```.
+
+Next part: [step 2](./step2)

@@ -117,7 +117,10 @@ gef➤  x/s $rbp
 
 Got myself a cleartext hash! Surely this will save me some computing time!
 
-Let's plug this hash in a script to bruteforce the password:
+Cracking the hash
+=================
+
+Let's plug the recovered hash in a script to bruteforce the password:
 ```python
 #!/usr/bin/env python3
 import argon2
@@ -152,3 +155,5 @@ We can import Gwrzienn's Megolm key using this password, and this gives us acces
 ![a](./step3_svh_room.png)
 
 All that we've got to start is a PCAP file and ... a windows 98 tip. Buckle up, for the next one is a beast.
+
+Next part: [step 4](./step4)

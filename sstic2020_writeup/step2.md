@@ -34,3 +34,5 @@ TripleChaCha and Gwrizienn seem to have exchanged keys to a room and talked toge
 The flag ```SSTIC{3e43df4fc2e11c9226bbc2a22bc12a4d083678e6a2f3e9ca2fae05e19ed42ba7}``` validates step2 and confirms we're on the right track!
 
 From now on, all flags will be used as the passwords to import users' [Matrix megolm keys](https://matrix.org/docs/guides/end-to-end-encryption-implementation-guide/). This was a really fun way to self-contain all flags into the initial challenge archive; congrats to the authors on this one, it made the hunting quite playful!
+
+Next part: [step 3](./step3)

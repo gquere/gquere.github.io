@@ -141,3 +141,5 @@ hashcat64.bin -m 13400 keepass.hash candidates.txt
 With the key to the database I could finally open it and I got the password to CeriseLiquide's Megolm key:
 
 ![a](./step5_keepass_opened.png)
+
+Next part: [step 6](./step6)

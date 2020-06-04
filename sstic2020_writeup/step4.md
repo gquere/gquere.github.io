@@ -356,3 +356,5 @@ A simple breakpoint placed at the start of the algorithm enabled me to recover t
 ![a](./step4_key.png)
 
 Let's plug this key in the algorithm and voilà: we've recovered the victim's exfiltrated files!
+
+Next part: [step 5](./step5)
