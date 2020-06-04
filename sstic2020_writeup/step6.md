@@ -537,12 +537,12 @@ Je m'en sers donc de pense-bete xD.
 La passphrase de mon export megolm est SSTIC{825145b95c18a865b78f750e153fcc1767f3954e9d629c781ef9150803f3f80
 ```
 
-Huh, I'm missing one byte at the end, probably because I didn't bother reversing the padding function. Gotta admit, I just bf'ed all 16 possibilities for the last byte until I could import the Megolm key.
+Huh, I'm missing one byte at the end, probably because I didn't bother reversing the padding function. Gotta admit, I just bf'ed all 16 possibilities of the last byte until I could import the Megolm key.
 
 
 Conclusion
 ==========
 
-And this concludes this year's SSTIC challenge. There was a last very trivial step about steganography which I'm sparing the reader. Consider this step to be the end of the challenge :)
+And this concludes this year's SSTIC challenge. There was another trivial step which involved steganography, but I'm sparing the reader of this one. Consider step 6 to be the end of the challenge!
 
-I hope you had as much fun reading my writeup as I had doing the challenge. Err maybe not actually ;)
+I hope you had as much fun reading my writeup as I had doing the challenge. Err come to think of it, I merely hope you had fun ;)
