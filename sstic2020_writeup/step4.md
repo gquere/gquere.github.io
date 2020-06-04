@@ -13,7 +13,7 @@ Challenge information
 
 PCAP analysis
 =============
-When discovering PCAPs I like to look to follow the TCP streams, which can give us an idea of what's happening. Here for instance there are 3 streams, two of which are cleartext on port 80 and one that seems encrypted on port 443 ... but with no TLS handshake? That's uncommon.
+When discovering PCAPs I like to first follow the TCP streams which can give an idea of what's happening. Here for instance there are 3 streams, two of which are cleartext on port 80 and one that seems encrypted on port 443 ... but with no TLS handshake? That's uncommon.
 
 ![a](./step4_pcap_session2.png)
 
@@ -26,9 +26,9 @@ Looks like an obfuscated script was injected in the page! Someone fell victim to
 
 Deobfuscating the script
 ========================
-It looked quite ugly but being VBS is actually rather easy to deobfuscate.
+The payload looked quite ugly but being VBS is actually rather easy to deobfuscate.
 
-First, there are constants:
+First, there are a few constants:
 ```vb
 Dim IIIIIIIIIIIIIIIIIIIIIIIII : IIIIIIIIIIIIIIIIIIIIIIIII = Array(&HF6,&H87,&HFB,&H6,&H3F,&H7E,&HA6,&HC2,&H4A,&H9B,&H3C,&HF7,&HC7,&HE7,&HDD,&H28,&HAC,&H8A,&H95,&H45,&H99,&H1,[ .. snip 25kB .. ]):
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII = navigator.userAgent
@@ -123,7 +123,7 @@ IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII = join(IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 ```
 
 
-These two first functions are used to decrypt the big array at the beginning. I failed to identify the algorithm, but it seems that the first fuction is a key scheduling algorithm and the second one is the actual decryption function. One can notice that the decryption key is the user agent of the navigator used by the victim, which we can find in the PCAP: "Mozilla/4.0 (compatible; MSIE 5.0; Windows 98; DigExt)". I merely replaced that in a shortened script of my own and dumped the decrypted array to a file.
+These two functions are used to decrypt the big array at the beginning. I failed to identify the algorithm, but it seems that the first fuction is a key scheduling algorithm and the second one is the actual decryption function. One can notice that the decryption key is the user agent of the navigator used by the victim, which we can find in the PCAP: "Mozilla/4.0 (compatible; MSIE 5.0; Windows 98; DigExt)". I merely replaced that in a shortened script of my own and dumped the decrypted array to a file.
 
 Once decrypted, the big blob at the beginning contains a few readable strings at the beginning, followed by a huge payload.
 ```
@@ -245,7 +245,7 @@ Function a()
 end Function
 ```
 
-I spent way too much time understanding the vulnerability abused in function ```a()```. The decrypted strings helped finding the source of the exploit: it seems to be an IE5 port of CVE-2013-2551 which was discovered by [Vupen](https://web.archive.org/web/20130617105700/http://www.vupen.com/blog/20130522.Advanced_Exploitation_of_IE10_Windows8_Pwn2Own_2013.php). It's a heap exploit so I was afraid that the payload would be different than a normal shellcode because of that. This was time spent uselessly as I discovered after a while that the big payload is just a regular shellcode... Could've shaved a loooot of time had I directly jumped to the shellcode.
+I spent way too much time understanding the vulnerability abused in function ```a()```. The decrypted strings helped finding the source of the exploit: it seems to be an IE5 port of CVE-2013-2551 which was discovered by [Vupen](https://web.archive.org/web/20130617105700/http://www.vupen.com/blog/20130522.Advanced_Exploitation_of_IE10_Windows8_Pwn2Own_2013.php). It's a heap exploit and I was afraid that the payload would be different from a conventional stack shellcode. This was time spent uselessly as I discovered after a while that the big payload is just a regular shellcode... Could've shaved a loooot of time had I directly jumped to reversing it!
 
 
 Preparing the setup
@@ -259,23 +259,23 @@ Long time no see, huh?
 
 The shellcode
 =============
-At about 25kB that's a big one. Reversing it took a lot of switching between IDA for static analysis and OllyDBG for dynamic analysis. I wish I could tell you exactly how it works, but I'm not sure. I also wish I could convey how hard it was for me to reverse it, but I can't do that either. So I'm taking a major shortcut in this writeup, and I'm just going to list what it does. Here's the [full shellcode](https://gist.github.com/gquere/f6e2f948f45d45ab3c07d43c3c66d50d) if you want to play along.
+At about 25kB that's a big one. Reversing it took a lot of switching between IDA for static analysis and OllyDBG for dynamic analysis. I wish I could tell you exactly how it works, but I'm not sure. I also wish I could convey how hard it was for me to reverse it, but I can't do that either. So I'm taking a major shortcut in this writeup, and I'm just going to list what I think it does. Here's the [full shellcode](https://gist.github.com/gquere/f6e2f948f45d45ab3c07d43c3c66d50d) if you want to play along.
 
 * Save functions needed later by doing some import hashing
 * VirtualAlloc() and SEH shenanigans
 * a huge crypto part (uses mov, xor, shr instructions) that uses 4 Lookup Tables (LUT)
 * VirtualFree()
-* create a socket, connect to it
-* loop over all files in C:\
-    * open the file, read the file into a buffer
-    * do some crypto on the buffer using a 5th LUT
-    * send the encrypted buffer over the socket
-* close the socket
+* creates a socket to a remote host and connects to it
+* loops over all files in C:\Documents
+    * opens the file, reads the file into a buffer
+    * does some crypto on the buffer using a 5th LUT
+    * sends the encrypted buffer over the socket
+* closes the socket
 
 
 Import hashing
 --------------
-Although I was not familiar with this techique, it appears to be [common malware behaviour](https://www.fireeye.com/blog/threat-research/2012/11/precalculated-string-hashes-reverse-engineering-shellcode.html): the shellcode does not embed textual strings for the functions it will need to call (think open, read, close) but rather has a custom hash of all these functions, and it parses the loaded DLL address space, hashing function names until it finds the right one and saves its address for later usage:
+Although I was not familiar with this technique, it appears to be [common malware behaviour](https://www.fireeye.com/blog/threat-research/2012/11/precalculated-string-hashes-reverse-engineering-shellcode.html): the shellcode does not embed litteral strings of the external functions it will need to call (think open, read, close) but rather embeds a custom hash of all these functions names. It then parses all of the loaded DLL address spaces and hashes all function names until it finds the right one, at which point the malware saves the function's address for later usage:
 ![a](./step4_hash.png)
 
 This pattern is very noticeable in a static analysis, because it needs to be repeated for each API function the shellcode will need.
