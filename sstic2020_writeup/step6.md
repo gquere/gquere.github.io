@@ -147,6 +147,8 @@ First, a 32 bits random value is generated. This initial random value is very im
 
 The message received is padded until it has the right length. Then it's scrambled and encrypted by blocks of 4 bytes by xoring the blocks with a value derived from the initial random value read from ```/dev/urandom```.
 
+Finally, the contract is created and the 32 ABI calls we saw earlier are performed.
+
 
 Second part: Smartcontract
 ==========================
@@ -198,14 +200,15 @@ contract Contract {
 }
 ```
 
-The logical ```and```'s and ``**``` powers are scary at first sight, but they're just compilation artifacts due to the native EVM int size being 256 bits and Solidity trying not to waste storage and memory. So if you're using a bunch of int32 or int64, the compiler will automatically cram these into a single int256.
+The logical and's ```&``` and ```**``` powers are scary at first sight, but they're just compilation artifacts due to the native EVM int size being 256 bits and Solidity trying not to waste storage and memory. So if you're using a bunch of int32 or int64, the compiler will automatically cram these into a single int256.
 
-Once we know this, there's not much going on in this constructor. It allocates some storage memory then writes its initialization value (located at the very end of the contract) and some magic numbers in it.
+Once we know this, there's not much going on in this constructor. It allocates storage memory then writes its seed (received at the very end of the contract) and two magic numbers into it.
+
 
 The program
 -----------
 
-Decompiling the second part is as ugly at first sight:
+Decompiling the second part looks as ugly as the first part:
 ```javascript
 contract Contract {
     function main() {
@@ -365,10 +368,10 @@ contract Contract {
 }
 ```
 
-The main() function is especially nasty. But on second glance it actually just is boilerplate code and doesn't have any purpose but to route calls. Think of it as a big switch case that reads the user's intended call and jumps to it.
-When compiled, function names are lost. All that remains is a function signature, which is a 32-bit hash (well technically it's the first 4 bytes of the SHA3 hash yadda yadda) of the function name and the type of its arguments. Notice something funny in this code? There's a function that has been automatically named ```currentIndex``` by the decompiler. That's because it's a common function name, and its signature exists in a [database of signatures](https://www.4byte.directory/) so the decompiler was able to automatically identify it. Pretty neat, huh?
+The main() function looks especially nasty. But on second glance it actually just is boilerplate code and doesn't have any purpose but to route calls. Think of it as a big switch case that reads the user's intended call and jumps to it.
+When compiled, function names are lost. All that remains is a function signature, which is a 32-bit hash (well technically it's the first 4 bytes of the SHA3 hash yadda yadda) of the function name and the type of its arguments. Notice something funny in this code? There's a function that the decompiler has automatically renamed ```currentIndex```. That's because it's a common function name, and its signature exists in a [database of signatures](https://www.4byte.directory/) so the decompiler was able to automatically identify it. Pretty neat, huh?
 
-So that explains the transaction data we saw earlier. Each transaction data is an ABI call to a function in the smartcontract. It's actually always the same call.
+This explains the 32 "transaction data" we saw earlier. Each transaction data is an ABI call to a function in the smartcontract. It actually is always the same call.
 
 For instance the first transaction data is :
 ```
@@ -377,7 +380,7 @@ For instance the first transaction data is :
 function signature                                        first argument                                                                second argument
 ```
 
-Which is akin to doing ```func_b5b6d2a8(0x563ec972fd8114ad, 0x5c)```.
+Which is akin to calling ```func_b5b6d2a8(0x563ec972fd8114ad, 0x5c)```.
 
 We also can retrieve some useful reversing information by comparing the memory at address 0 at the start and at the end of the contract:
 ```
@@ -486,7 +489,7 @@ The first two are trivial but the last one not so much. I started looking around
 
 ![a](./step6_paper.png)
 
-I do not maths any more than you do, but this was surprisingly easy to translate to code:
+I do not like maths any more than you do, but this was surprisingly easy to translate to code:
 ```python
 # MODULAR QUADRATIC EQUATION SOLVER ############################################
 def compute_next_sqrt(prev_sqrt, x, N):
