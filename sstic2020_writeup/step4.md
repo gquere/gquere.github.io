@@ -1,3 +1,7 @@
+---
+title: SSTIC 2020 step 4
+---
+
 Challenge information
 =====================
 

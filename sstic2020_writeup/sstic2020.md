@@ -1,3 +1,7 @@
+---
+title: SSTIC challenge 2020 writeup
+---
+
 This is my writeup to the 2020 SSTIC's challenge.
 
 The SSTIC is the biggest french security conference. Its annual challenge is generally considered a difficult reversing challenge that involves fun technologies.

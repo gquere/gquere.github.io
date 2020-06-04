@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
+    <title>{{ page.title }}</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +14,13 @@
 
     <header>
       <div class="container">
-        <a href="https://github.com/gquere/" style="text-decoration:none">
-          <img src="https://avatars3.githubusercontent.com/u/1585000?s=80" alt="das" style="border-radius: 50px;">
-          <h1 style="display: inline; margin-left: 0px;">gquere</h1>
-        </a>
+        <div class="row" style="display: flex;justify-content: space-between;">
+          <h1 style="display: inline; margin-left: 0px;"> {{ page.title }}</h1>
+          <a href="https://github.com/gquere/" style="text-decoration:none" class="pull-right">
+            <img src="https://avatars3.githubusercontent.com/u/1585000?s=80" alt="das" style="border-radius: 50px;">
+            <h2 style="display: inline; margin-right: 0px;">Guillaume Quéré</h2>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -26,6 +30,11 @@
         {{ content }}
       </section>
     </div>
+
+    <footer>
+        <div class="container">
+        </div>
+    </footer>
 
   </body>
 </html>
