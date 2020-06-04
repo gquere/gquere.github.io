@@ -12,12 +12,15 @@ Challenge Information
 
 Key provider
 ============
-Classically you'd open a Keepass database using a password entered in the GUI. But there's an alternate method if you want to, for instance, move your password to a secure location like a smartcard: using key providers. They are plugins in the form of a shared library, in our case a DLL file, that will programatically get the password from about any source you can imagine.
+Conventionally you'd open a Keepass database by entering a password in the GUI. But there's an alternate method if you want to, for instance, move your password to a secure location like a smartcard: using key providers. Key providers are plugins in the form of a shared library, in our case a DLL file, that will programatically get the password from about any source you can imagine.
 
-Opening the KeyProvider in Ghidra gives us the following:
+Opening the challenge's KeyProvider in Ghidra gives us the following:
+
 ![a](./step5_keyprovider.png)
 
-The key provider talks to a serial peripheral on port COM1. When sent the single char '?' it will answer a 20-bytes password. Nothing more to see here, so let's move to the ISO file.
+The key provider talks to a serial peripheral on port COM1. When sent the single char ```'?'``` it will answer a 20-bytes password that will be used to open the keepass database.
+
+Nothing more to see here, so let's move to the ISO file.
 
 
 ISO file
@@ -63,15 +66,15 @@ Notes on reversing MIPS
 -----------------------
 I wasn't familiar with the architecture, but it's actually fairly readable. There are a few things to know:
 
-* the most used calling convention uses $a0 to $a3 to pass arguments, the rest are passed on the stack
-* the jal instruction is used to call functions
-* the callee returns using jr $ra
-* the return values are stored in $v0 and optionnaly $v1
+* the most used calling convention uses ```$a0``` to ```$a3``` to pass arguments, the rest are passed on the stack
+* the ```jal``` instruction is used to call functions
+* the callee returns using ```jr $ra```
+* the return values are stored in ```$v0``` and optionnaly ```$v1```
 * MIPS uses a very strange dual pipeline which can have instructions out-of-order in the assembly listing when a call is made
 
 ![a](./step5_pipeline.png)
 
-Here, temporally, a0, a1 and a2 are set *before* ```function_with_3_args``` is called.
+Here, temporally, ```$a0```, ```$a1``` and ```$a2``` are set *before* ```function_with_3_args``` is called. Due to the pipeline mechanism, the ```load immediate $a2``` appears out of order.
 
 That's basically all you need to know to start reversing MIPS :)
 
@@ -79,7 +82,7 @@ That's basically all you need to know to start reversing MIPS :)
 Reversing the binary
 ====================
 
-This program isn't too big but when reversing I like to start with what I know the program should do. From looking at the keyprovider earlier, we know that some serial stuff will be involved: we will receive a one-byte input '?' and answer a 20-byte password. In the [memory layout specification](http://problemkaputt.de/psx-spx.htm#serialportsio), we get the serial port base address: 0x1F801050. So let's first find that value in the binary and find functions which reference it. Bingo, this brings us in a function that seems to perform some action (init/read/write) depending on a parameter:
+This program isn't too big but when reversing I like to start with what I know the program should do. From looking at the keyprovider earlier, we know that some serial stuff will be involved: we will receive a one-byte input ```'?'``` and answer a 20-byte password. In the [playstation's memory layout specification](http://problemkaputt.de/psx-spx.htm#serialportsio), we get the serial port base address: ```0x1F801050```. So let's first find that value in the binary and find functions which reference it. Bingo, this brings us in a function that seems to perform some action (init/read/write) depending on a parameter:
 
 This portion to write a byte:
 
@@ -94,9 +97,9 @@ The caller to this function seems to be our main function, as everything's place
 
 ![a](./step5_screensaver_main.png)
 
-At the very top of the loop, we can observe that the program will read if there is any incoming data on the serial port, read one byte, compare it to '?' and if so send 20 bytes of a memory address back on the serial.
+At the very top of the loop, we can observe that the program will read if there is any incoming data on the serial port, read one byte, compare it to ```'?'``` and if so send 20 bytes of a memory address back to the serial port.
 
-At this point I thought I had finished the challenge, so emulated sending the '?' byte in the debugger and got a key which I tried ... and it failed. There had to be more to this challenge :(
+At this point I thought I had finished the challenge, so I emulated sending the '?' byte in the debugger and got a key which I tried ... and it failed. There had to be more to this challenge :(
 
 So I took a look at the rest of the loop and there were a bunch of magic numbers:
 
@@ -104,7 +107,9 @@ So I took a look at the rest of the loop and there were a bunch of magic numbers
 
 These are [nothing-up-my-sleeve numbers](https://en.wikipedia.org/wiki/Nothing-up-my-sleeve_number) commonly found in crypto. Oh noes, not again!
 
-I traced these to SHA1/RIPEMD which matched the expected output length. But I was somehow stuck on the possible input for a while because i'm pretty sure this code disables the joystick and that's the only input I could think of:
+I traced these to the SHA1 and RIPEMD algorithms, which matched the expected output length.
+
+But I was somehow stuck on the possible user inputs of this challenge for a while because i'm pretty sure this code disables the joystick and that's the only input I could think of:
 
 ![a](./step5_screensaver_disable_joystick.png)
 
@@ -127,7 +132,7 @@ The rest seemed to be RIPEMD160 but I couldn't immediately replicate its results
 Recovering the key
 ==================
 I used John the Ripper's ```keepass2john``` feature to get a hash from the keepass database.
-Then I generated all 65536 key candidates in hashcat's "$HEX[]" [format](https://hashcat.net/forum/thread-5684.html) then fed them to hashcat against the keepass' hash:
+Then I generated all 65536 key candidates in hashcat's ```$HEX[]``` [format](https://hashcat.net/forum/thread-5684.html) and fed these to hashcat against the keepass' hash:
 ```
 keepass2john keepass.kdb > keepass.hash
 hashcat64.bin -m 13400 keepass.hash candidates.txt

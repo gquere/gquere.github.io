@@ -5,22 +5,24 @@ Challenge information
 * Rating: Easy    2h
 * Challenge inputs:
     * a file containing some sort of hashes
-    * a wordlist of 26 entries
-    * a linux binary
+    * a text wordlist of 26 entries
+    * a linux binary ```show_password```
 
 
 Getting the hash
 ================
 
-Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password.
+Per the instructions we need to find the 3-words password from the wordlist that somehow recovers the chat password using the provided binary.
 
-The hashes file looks like it is (somewhat) (badly) encrypted. We can barely make out that it's probably a hashing algorithm with a salt and a work factor:
+The hashes file looks like it is (somewhat) (badly) encrypted. We can barely distinguish that it's a hashing algorithm with a salt and a work factor:
 ```
 meteo:$sstic$ad6w.742e=#1!2=&$t/3?v0.,ebYY_F}QSWYWDfDIuYB@oj2Jc*XqIE{zOwEzDtqCFhj^q
 chat:$sstic$ad6w.742e=#1!2=&$t/3?v0.,SzfPIDt~VhWXr]SCECfv5j2rZeob2Z.@4^pgqdU[AGMBW
 ```
 
-The simplest way of getting the password is to just let it bruteforce from the wordlist. After all there's only 26^3 combinations to try. We've got a toy example to get a sense of the timings:
+The simplest way of getting the password is to just let it bruteforce from the wordlist. After all there are only 26^3 combinations to try!
+
+We've got a toy example to get a sense of the timings:
 ```bash
 time ./show_password hashes.txt meteo
 Password for meteo: AlloBruineCrachin
@@ -115,7 +117,7 @@ gef➤  x/s $rbp
 
 Got myself a cleartext hash! Surely this will save me some computing time!
 
-Here's the script I wrote to bruteforce the password:
+Let's plug this hash in a script to bruteforce the password:
 ```python
 #!/usr/bin/env python3
 import argon2
@@ -134,7 +136,7 @@ for word1 in words:
                 exit(0)
 ```
 
-Which gave me the correct password in about 20 minutes, which is miles better than the 8 hours initially expected!
+This bruteforce recovered the correct 3-words password in about 20 minutes, which is miles better than the 8 hours initially expected!
 
 All that's left is to get the flag:
 ```
@@ -145,6 +147,8 @@ Welcome ☺
 Your password is SSTIC{556c34304f6279736e516f3267794e4963637a637051}
 ```
 
-We can import Gwrzienn's Megolm key using this password, and this gives us access to another private conversation with :
+We can import Gwrzienn's Megolm key using this password, and this gives us access to another room conversation:
+
+![a](./step3_svh_room.png)
 
 All that we've got to start is a PCAP file and ... a windows 98 tip. Buckle up, for the next one is a beast.

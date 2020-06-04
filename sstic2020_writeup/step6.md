@@ -505,20 +505,26 @@ def solve_modquadratic(c):
     return (x1, x2)
 ```
 
-This is supposed to work as long as a is even and b is odd.
+This is supposed to work as long as ```a``` is even and ```b``` is odd.
 
 
 Putting it all together
 =======================
-I wrote a python script to invert all steps and bruteforce the random byte for each message. Yes, [you can see it](https://gist.github.com/gquere/99ca5cb36f8f31225d8353f82fde1c02). Yes, it is ugly.
+I wrote a python script to invert all steps and bruteforced the random byte for each message, which is the only random data that is not provided in the challenge input. Yes, [you can see the script](https://gist.github.com/gquere/99ca5cb36f8f31225d8353f82fde1c02). Yes, it is ugly.
 
-There are some false positives which are easily removed but here's what it managed to recover:
+There are some false positives which are easily removed but here's the message it managed to recover:
 ```
-NO WAY! Personne n'arrivera jamais a dechiffrer ce message sans mon programme de dechiffrement. Je m'en sers donc de pense-bete xD. La passphrase de mon export megolm est SSTIC{825145b95c18a865b78f750e153fcc1767f3954e9d629c781ef9150803f3f80
+NO WAY! Personne n'arrivera jamais a dechiffrer ce message sans mon programme de dechiffrement.
+Je m'en sers donc de pense-bete xD.
+La passphrase de mon export megolm est SSTIC{825145b95c18a865b78f750e153fcc1767f3954e9d629c781ef9150803f3f80
 ```
 
 Huh, I'm missing one byte at the end, probably because I didn't bother reversing the padding function. Gotta admit, I just bf'ed all 16 possibilities for the last byte until I could import the Megolm key.
 
-And this concludes this year's SSTIC challenge. There was a last very trivial step about steganography which I'm sparing the reader. Consider it the end of the challenge :)
+
+Conclusion
+==========
+
+And this concludes this year's SSTIC challenge. There was a last very trivial step about steganography which I'm sparing the reader. Consider this step to be the end of the challenge :)
 
 I hope you had as much fun reading my writeup as I had doing the challenge. Err maybe not actually ;)

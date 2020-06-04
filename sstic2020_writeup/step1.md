@@ -7,7 +7,7 @@ Challenge information
 Getting the memory dump
 -----------------------
 
-To start our investigation, we're given an archive, [which you can download here](https://static.sstic.org/challenge2020/dump.tar.gz).
+To start our investigation, we're given an archive [which you can download here](https://static.sstic.org/challenge2020/dump.tar.gz).
 Once extracted, its contents indicate that this first step is a memory forensics challenge:
 ```
 dump
@@ -26,7 +26,7 @@ dump
 
 The [LiME](https://github.com/504ensicslabs/lime) project is a memory extractor for Linux. It's used to create memory snapshots of a running system.
 
-If you're accustomed to CTFs you may want to rush into [volatility](https://github.com/volatilityfoundation/volatility), but let's take a look at the script first (snipped for brevity's sake):
+If you're familiar with CTFs you may want to rush into [volatility](https://github.com/volatilityfoundation/volatility), but let's first take a look at the script first (snipped for brevity's sake):
 ```bash
 # Compile LiME kernel module against target kernel
 if [ ! -d "${script_dir}/LiME" ]; then
@@ -65,7 +65,7 @@ Getting the kernel version
 --------------------------
 In order to properly "read" the memory dump, volatility needs a profile that basically tells it what the kernel offsets and addresses are. Contrary to the limited number of Windows kernels, because there as sooooo many Linux kernels (multiple versions, multiple distributions with multiple lineups each with their own patches ...) you'll generally need to generate your own profile since it doesn't exist. This has become a very common step in CTFs to harden the difficulty a bit.
 
-The first step is to find the kernel version for which we want a profile. This is easily identified using grep (or [ngp](https://github.com/gquere/ngp2) ;) ):
+The first step is to find the kernel version for which we want a profile. This is easily identified using grep or [ngp ;)](https://github.com/gquere/ngp2) :
 ```
 grep -o --text -e 'Linux .* x86_64' memory_unzipped
 Linux kazbng-backup 4.19.0-6-amd64 #1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11) x86_64
@@ -86,7 +86,7 @@ Creating the volatility profile
 -------------------------------
 Alright, so we need to generate a volatility profile for Debian with kernel 4.19.0-6. "4.19.0" is a kernel version, and "-6" indicates debian's custom patch level. This is why the kernel ecosystem is a mess.
 
-To do this I created a Debian 10 vanilla virtual machine, but its installed kernel was 4.19.0-8. I tried it anyways and it didn't work. So I installed the deprecated 4.19.0-6 packages and its headers and selected it in Grub when booting. You just need to [follow the instructions](https://github.com/volatilityfoundation/volatility/wiki/Linux).
+To generate the profile I started with a Debian 10 vanilla virtual machine. Its currently installed kernel was 4.19.0-8 but I tried it anyways and it didn't work. So I installed the deprecated 4.19.0-6 kernel and headers, then selected it in Grub when booting. You just need to [follow the instructions](https://github.com/volatilityfoundation/volatility/wiki/Linux).
 
 The volatility profile is a zip archive that contains two files:
 
@@ -104,35 +104,23 @@ Reading the dump
 ----------------
 Volatility can read files that are still cached. Let's get a list of these:
 ```
-python vol.py --file=/mnt/cdata/ctf/dump/extracted/memory_unzipped --profile=Linuxdebian-4_19_0-6x64 linux_enumerate_files > /mnt/cdata/ctf/dump/extracted/files
+python vol.py --file=memory_unzipped --profile=Linuxdebian-4_19_0-6x64 linux_enumerate_files > files
 ```
 
 I tweaked the output a bit in vim to get the filename first and the the inode, and deleted files that I wasn't going to look at on the first run (/sys, /proc, /run, /usr, /lib ...).
 
-Then I ran a custom script to dump the remaining files (mostly /etc, /home and /tmp):
+Then I ran a simple script to dump the remaining files (mostly /etc, /home and /tmp):
 ```bash
 #!/bin/bash
 
-OUT_PATH="/mnt/cdata/ctf/dump/extracted/fs"
+OUT_PATH="./extracted/fs"
 
 while read -r line
 do
     inode=$(echo $line | cut -d' ' -f2)
     apath=$(echo $line | cut -d' ' -f1)
-    name=$(basename $apath)
-    dname=$(dirname $apath)
 
-    if [ -f $OUT_PATH/$apath ]; then
-        continue
-    fi
-
-    echo $name
-    echo $dbame
-
-    mkdir -p $OUT_PATH/$dname
-
-    python vol.py --file=/mnt/cdata/ctf/dump/extracted/memory_unzipped --profile=Linuxdebian-4_19_0-6x64 linux_find_file -i $inode -O "$OUT_PATH/$apath"
-
+    python vol.py --file=memory_unzipped --profile=Linuxdebian-4_19_0-6x64 linux_find_file -i $inode -O "$OUT_PATH/$apath"
 done < files
 ```
 
@@ -190,9 +178,9 @@ do
 done
 ```
 
-Ok so this machine runs a command over SSH on another machine which concatenates a ```pg_dump``` of a PostgreSQL database and a folder archive, gzips it then encrypts it. This database is the copied locally using scp, split into chunks and encrypted again into an external drive using GPG and then ... the drive is unmounted. Uh oh, I don't have this drive anywhere in my snapshot. Luckyly for us there's a fail right afterwards: ```srm -r ${WORKDIR}```. The files were never deleted!
+Ok so this machine runs a command over SSH on another machine which concatenates a ```pg_dump``` of a PostgreSQL database and a folder archive, gzips it then encrypts it. This database is then copied locally using scp, split into chunks and encrypted again into an external drive using GPG and then ... the drive is unmounted. Uh oh, I don't have this drive anywhere in my snapshot. Luckyly for us there's a fail right afterwards: ```srm -r ${WORKDIR}```. The files were never deleted!
 
-After extracting these, we just need to stitch them back together using cat (did you know this was cat's original purpose?) and decrypt the archive:
+After carving these files from the temporary directory, we just need to stitch them back together using cat (did you know this was cat's original purpose?) and decrypt the archive:
 ```
 cat tmp?? > synapse.bak
 openssl enc -d -aes256 -iv 5d115a29d1e70fc7cef8441e3c4fcb53 -K ed358af6ce822480d384df2cb978576cd51297373539938ea99f26813fff525f -in synapse.bak -out synapse_dec.bak
