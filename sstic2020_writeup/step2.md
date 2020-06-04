@@ -10,11 +10,11 @@ Challenge Information
 
 Installing Matrix-Synapse
 -------------------------
-We've previously recovered a PostgreSQL dump and a file archive.
+We've previously recovered a PostgreSQL dump and a media archive.
 
 Looking into the database we can conclude it's a [matrix-synapse](https://github.com/matrix-org/synapse) dump.
 
-We'll need to install it and import the database.
+We'll need to install matrix and import the database.
 
 I didn't take notes of the installations process, I simply followed the [installation instructions](https://github.com/matrix-org/synapse/blob/master/INSTALL.md) then configured it to use psql according to [this documentation](https://github.com/matrix-org/synapse/blob/master/docs/postgres.md).
 
@@ -27,7 +27,7 @@ Then we're ready to start!
 
 Starting the investigation
 --------------------------
-Let's just log as anyone on the server, and look at the main unencrypted chat room:
+Let's just log as anyone on the server and have a look at the main unencrypted chat room:
 
 ![a](matrix_public.png)
 
