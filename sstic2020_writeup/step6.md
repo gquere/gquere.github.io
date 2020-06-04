@@ -8,6 +8,9 @@ Challenge information
     * the next megolm key dump ```fraiseglacee.megolm_keys.txt```
     * a link to a mathematics paper on the subject of modular arithmetics
 
+
+Getting more information
+========================
 The contract memory dump looks like this (rearranged using a rule I'll describe afterwards):
 
 ```
@@ -67,7 +70,8 @@ Done.
 
 Alright so we can conclude that the ```contract_memory.txt``` we've been given is a sample output of the program. It's intuitive that we need to recover the input message given the blockchain's memory.
 
-After fiddling a bit in the binary's disassembly there's a static debug mode. I just patched the instruction so that it's always enabled. Fortunately the binary does not have any dynamic tampering measures.
+After fiddling a bit in the binary's disassembly there's a hardcoded disabled debug mode. I just patched the binaries instructions so that it's always enabled. Fortunately the binary does not have any dynamic tampering measures.
+
 The new output is:
 
 ```
@@ -124,16 +128,20 @@ Memory slot 2B00120B81607971383F6F5676C1551D6BB27BE3F263689FD3630E1A5BE14018 = 0
 Done.
 ```
 
-The binary deploys a smartcontract and interacts with it by calling its ABI (transaction data). After calling it 32 times, it will dump its memory.
+The binary deploys a smartcontract and interacts with it by calling its ABI (transaction data). After calling it 32 times, it will dump the contract's memory (on the blockchain).
+
 Thus we can identify two parts to this challenge that will need to be idependently reversed: the binary and the smartcontract.
+
 
 First part: Alaide Binary
 =========================
-This part was a bit hard because it's C++ Boost statically compiled, so there are virtual functions everywhere. You can't really tell where the original program stops and the framework starts. I tried to use [ooanalyzer](https://insights.sei.cmu.edu/sei_blog/2019/07/using-ooanalyzer-to-reverse-engineer-object-oriented-code-with-ghidra.html) of the [pharos framework](https://github.com/cmu-sei/pharos) to separate the program from the framework, but it segfaulted after 12 hours.
+This part was a bit hard because the binary is coded in C++ and is statically compiled against Boost, so there are virtual functions everywhere. You can't really tell where the original program stops and the framework starts. I tried to use [ooanalyzer](https://insights.sei.cmu.edu/sei_blog/2019/07/using-ooanalyzer-to-reverse-engineer-object-oriented-code-with-ghidra.html) of the [pharos framework](https://github.com/cmu-sei/pharos) to separate the program from the framework, but it segfaulted after 12 hours.
 
 Anyways, I'm summing up this part because it wasn't that interesting, just a matter of understanding what's done so that its crypto may be inverted later.
 
-The message received is padded until it has the right length. Then it's scrambled and encrypted by blocks of 4 bytes by xoring it with a value derived from an initial random value read from ```/dev/urandom```. This initial value is very important and is used to when calling the contract later on, as some form of seed.
+First, a 32 bits random value is generated. This initial random value is very important and is used as an argument when invoking the contract later on, as some form of seed.
+
+The message received is padded until it has the right length. Then it's scrambled and encrypted by blocks of 4 bytes by xoring the blocks with a value derived from the initial random value read from ```/dev/urandom```.
 
 
 Second part: Smartcontract
@@ -146,6 +154,8 @@ If you're not familiar with Solidity here are articles that helped me get starte
 
 
 We can put the whole contract data in a decompiler, such as [ethervm](https://ethervm.io/decompile).
+
+You can also play along using [Remix](https://remix.ethereum.org/), a great EVM debugging tool.
 
 There are two parts to a contract data :
 
@@ -184,7 +194,8 @@ contract Contract {
 }
 ```
 
-The logical and's and powers are scary at first sight, but they're just compilation artifacts due to the native EVM int size being 256 bits and Solidity trying not to waste as storage/memory. So if you're using a bunch of int32 or int64, the compiler will automatically cram these into a single int256.
+The logical ```and```'s and ``**``` powers are scary at first sight, but they're just compilation artifacts due to the native EVM int size being 256 bits and Solidity trying not to waste storage and memory. So if you're using a bunch of int32 or int64, the compiler will automatically cram these into a single int256.
+
 Once we know this, there's not much going on in this constructor. It allocates some storage memory then writes its initialization value (located at the very end of the contract) and some magic numbers in it.
 
 The program
@@ -471,7 +482,7 @@ The first two are trivial but the last one not so much. I started looking around
 
 ![a](./step6_paper.png)
 
-Yes, I do not like it either. But this was surprisingly easy to translate to code:
+I do not maths any more than you do, but this was surprisingly easy to translate to code:
 ```python
 # MODULAR QUADRATIC EQUATION SOLVER ############################################
 def compute_next_sqrt(prev_sqrt, x, N):
@@ -512,7 +523,7 @@ Putting it all together
 =======================
 I wrote a python script to invert all steps and bruteforced the random byte for each message, which is the only random data that is not provided in the challenge input. Yes, [you can see the script](https://gist.github.com/gquere/99ca5cb36f8f31225d8353f82fde1c02). Yes, it is ugly.
 
-There are some false positives which are easily removed but here's the message it managed to recover:
+There are some false positives which are easily removed. Here's the message it managed to recover:
 ```
 NO WAY! Personne n'arrivera jamais a dechiffrer ce message sans mon programme de dechiffrement.
 Je m'en sers donc de pense-bete xD.
