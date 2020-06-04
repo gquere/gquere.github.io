@@ -11,7 +11,7 @@ Challenge information
 Getting the memory dump
 -----------------------
 
-To start our investigation, we're given an archive [which you can download here](https://static.sstic.org/challenge2020/dump.tar.gz).
+To start our investigation, we're provided with an archive [which you can download here](https://static.sstic.org/challenge2020/dump.tar.gz).
 Once extracted, its contents indicate that this first step is a memory forensics challenge:
 ```
 dump
@@ -30,7 +30,7 @@ dump
 
 The [LiME](https://github.com/504ensicslabs/lime) project is a memory extractor for Linux. It's used to create memory snapshots of a running system.
 
-If you're familiar with CTFs you may want to rush into [volatility](https://github.com/volatilityfoundation/volatility), but let's first take a look at the script first (snipped for brevity's sake):
+If you're familiar with CTFs you may want to rush into [volatility](https://github.com/volatilityfoundation/volatility), but let's first take a look at the script (snipped for brevity's sake):
 ```bash
 # Compile LiME kernel module against target kernel
 if [ ! -d "${script_dir}/LiME" ]; then
@@ -55,8 +55,9 @@ insmod "${script_dir}/LiME/src/lime-$(uname -r).ko" "path=$PWD/memory format=pad
 echo "End of memory dump at $(date +%s) : $(du -h memory | cut -f1)"
 ```
 
-Ok so the script is probably in someone's memory forensics toolkit. It just grabs LiME, compiles it and then runs it off of the USB stick against the currently running system.
-There's one thing to note here: ```compress=1```. Thus we'll need to unzip the generated archive to get to the raw memory.
+Ok so the script is probably part of someone's memory forensics toolkit. It just grabs LiME from GitHub, compiles it and then runs it off of the USB stick against the currently running system.
+
+There's one thing to note here: ```compress=1```. According to the manpage, we'll need to unzip the generated archive to get to the raw memory.
 
 ```
  gquere@sandbox  ~/sstic2020/step1/dump/extracted  file memory
@@ -67,7 +68,7 @@ memory: zlib compressed data
 
 Getting the kernel version
 --------------------------
-In order to properly "read" the memory dump, volatility needs a profile that basically tells it what the kernel offsets and addresses are. Contrary to the limited number of Windows kernels, because there as sooooo many Linux kernels (multiple versions, multiple distributions with multiple lineups each with their own patches ...) you'll generally need to generate your own profile since it doesn't exist. This has become a very common step in CTFs to harden the difficulty a bit.
+In order to properly "read" the memory dump, volatility needs a profile that basically indicates what the kernel offsets and addresses are. Contrary to the limited number of Windows kernels, because there as sooooo many Linux kernels (multiple versions, multiple distributions with multiple lineups each with their own patches ...) you will have to generate your own profile since it doesn't exist. This has become a very common step in CTFs to harden the difficulty a bit.
 
 The first step is to find the kernel version for which we want a profile. This is easily identified using grep or [ngp ;)](https://github.com/gquere/ngp2) :
 ```
@@ -90,7 +91,7 @@ Creating the volatility profile
 -------------------------------
 Alright, so we need to generate a volatility profile for Debian with kernel 4.19.0-6. "4.19.0" is a kernel version, and "-6" indicates debian's custom patch level. This is why the kernel ecosystem is a mess.
 
-To generate the profile I started with a Debian 10 vanilla virtual machine. Its currently installed kernel was 4.19.0-8 but I tried it anyways and it didn't work. So I installed the deprecated 4.19.0-6 kernel and headers, then selected it in Grub when booting. You just need to [follow the instructions](https://github.com/volatilityfoundation/volatility/wiki/Linux).
+To generate the profile I started with a Debian 10 vanilla virtual machine. Its currently installed kernel was 4.19.0-8 but I tried it anyways and it didn't work. So I installed the deprecated 4.19.0-6 kernel and headers, then selected it in Grub when booting. To create the profile you just need to [follow the instructions](https://github.com/volatilityfoundation/volatility/wiki/Linux).
 
 The volatility profile is a zip archive that contains two files:
 
@@ -104,6 +105,7 @@ You can verify that it's detected by volatility by running:
 python vol.py --info | grep -i debian
 ```
 
+
 Reading the dump
 ----------------
 Volatility can read files that are still cached. Let's get a list of these:
@@ -113,7 +115,7 @@ python vol.py --file=memory_unzipped --profile=Linuxdebian-4_19_0-6x64 linux_enu
 
 I tweaked the output a bit in vim to get the filename first and the the inode, and deleted files that I wasn't going to look at on the first run (/sys, /proc, /run, /usr, /lib ...).
 
-Then I ran a simple script to dump the remaining files (mostly /etc, /home and /tmp):
+Then I automated the dumping of the remaining files (mostly /etc, /home and /tmp):
 ```bash
 #!/bin/bash
 
