@@ -341,13 +341,13 @@ I'm sure there are some pretty clever tricks here, but I wasn't able to follow t
 
 Second crypto
 -------------
-The second crypto blob is the interesting one as it's the one used over all files read from the victim's filesystem and uses a fixed key derived from the earlier AES blob.
+The second crypto blob is the interesting one as it's the one used to encrypt all files read from the victim's filesystem. It uses a fixed key derived from the earlier AES blob.
 
 ![a](./step4_coconut.png)
 
-In order to identify the algorithm, I once again googled its lookup table. Only a few results yelded a very obscure algorithm: [COCONUT98](https://books.google.fr/books?id=i1MDsloDRs4C&pg=PA270&lpg=PA270&dq=6abf71&source=bl&ots=BOleGHBl7X&sig=ACfU3U06Z3U9RtL-BCuVPldAfKdn3gluUw&hl=en&sa=X&ved=2ahUKEwjM2dDQkObpAhWRCOwKHck4DmwQ6AEwD3oECAoQAQ#v=onepage&q=6abf71&f=false).
+In order to identify the algorithm, I once again googled its lookup table. Only a few results yielded a very obscure algorithm: [COCONUT98](https://books.google.fr/books?id=i1MDsloDRs4C&pg=PA270&lpg=PA270&dq=6abf71&source=bl&ots=BOleGHBl7X&sig=ACfU3U06Z3U9RtL-BCuVPldAfKdn3gluUw&hl=en&sa=X&ved=2ahUKEwjM2dDQkObpAhWRCOwKHck4DmwQ6AEwD3oECAoQAQ#v=onepage&q=6abf71&f=false).
 
-It's a Feistel network but a rather strange one at that: the decryption key is not the encryption key, which usually is the case for Feistel networks! Feistels are really cool algorithms, they're using one-way hash functions at their core, but yet are easily inverted thanks to the clever mathematics of xor ladders used.
+It's a Feistel network but a rather strange one at that: the decryption key is not the encryption key, which usually is the case for Feistel networks! Feistels are really cool algorithms, they're using one-way hash functions at their core, but yet are easily inverted thanks to the clever mathematics of the xor ladders used.
 
 ![a](./step4_coconut_algo.png)
 
