@@ -29,6 +29,8 @@ wget .*--password
 wget .*--http-password
 wget .*--ftp-password
 wget .*--proxy-password
+echo .*|\s*passwd
+echo .*|\s*chpasswd
 Authorization.*:.*Basic
 Authorization.*:.*Bearer
 docker login .*-p 
