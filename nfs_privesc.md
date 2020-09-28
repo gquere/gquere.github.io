@@ -62,10 +62,13 @@ This exploit relies on a problem in the NFSv3 specification that mandates that i
 Here's a [library that lets you do just that](https://github.com/sahlberg/libnfs).
 
 ### Compiling the example
-Depending on your kernel, you might need to adapt the example. In my case I had to comment out the fallocate syscall. Due to the absence of cmake on the system, I also needed to link against the precompiled library which can be [found here](https://sites.google.com/site/libnfstarballs/li).
+Depending on your kernel, you might need to adapt the example. In my case I had to comment out the fallocate syscalls.
 
 ```bash
-gcc -fPIC -shared -o ld_nfs.so examples/ld_nfs.c -ldl -lnfs -I./include/ -L../libnfs-1.11.0/lib/.libs/
+./bootstrap
+./configure
+make
+gcc -fPIC -shared -o ld_nfs.so examples/ld_nfs.c -ldl -lnfs -I./include/ -L./lib/.libs/
 ```
 
 ### Exploiting using the library

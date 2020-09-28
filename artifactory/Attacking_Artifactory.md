@@ -177,7 +177,7 @@ TODO. [Open an issue if you have sample encrypted data](https://github.com/gquer
 
 #### New format (>=5.9): AES128-CBC encryption, stored as base58
 External secrets (such as passwords of remote servers) are found in the [configuration descriptors](https://www.jfrog.com/confluence/display/JFROG/Configuration+Files#ConfigurationFiles-GlobalConfigurationDescriptor), e.g. ```/var/opt/jfrog/artifactory/etc/artifactory.config.latest.xml``` and look like:
-```
+```xml
 <keyStorePassword>AM.25rLQ.AES128.vJMeKkaK6RBRQCUKJWvYEHUw6zs394X1CrRugvJsQGPanhMgQ5be8yjWDhJYC4BEz2KRE</keyStorePassword>
 ```
 
