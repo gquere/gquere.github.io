@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Decrypt mRemoteNG configuration files](./mRemoteNG.md)
 * [Artifactory Hacking guide](./artifactory/Attacking_Artifactory)
 * [Exporting Outlook S/MIME private keys](./OutlookDecrypt/OutlookDecrypt)
 * [Attacking source repositories](./Attacking_source_repositories)
