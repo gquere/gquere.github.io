@@ -18,11 +18,9 @@ OpenLDAP dumps from ldapsearch may contain a variety of hash algorithms and form
 |{PBKDF2-SHA512} | 12100 (***)  |                  |
 
 
-```(*)```: Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```
-
-```(**)```: Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.
-
-```(***)```: PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.
+```(*)```: Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```  
+```(**)```: Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.  
+```(***)```: PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.  
 
 
 Where to get wordlists?
