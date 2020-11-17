@@ -17,9 +17,9 @@ OpenLDAP dumps from ldapsearch may contain a variety of hash algorithms and form
 |{CRYPT}         | 1800 (**)    | sha512crypt (**) |
 |{PBKDF2-SHA512} | 12100 (***)  |                  |
 
-(*): Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```
-(**): Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.
-(***): PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.
+```(*)```: Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```
+```(**)```: Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.
+```(***)```: PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.
 
 
 Where to get wordlists?
@@ -87,6 +87,7 @@ This is described in more detail [here for hashcat](https://hashcat.net/wiki/dok
 
 JtR specifics
 =============
+
 Installation
 ------------
 Use the bleeding jumbo branch of the [github repo](https://github.com/openwall/john).
@@ -97,17 +98,22 @@ Running John without specifying a dict will cause it to run some interesting bas
 
 formats
 -------
+```
 redmine: dynamic_1501
 user:password$salt
+```
 
 Hashcat specifics
 =================
+
 Installation
 ------------
 Use the NVidia official driver. May require you to sometimes hold the kernel back when the ABI is changing (as is currently the case between 5.8 and 5.9). Follow the official installation procedure at []().
 
 Hash format
 -----------
-username:hash
-hashcat --username
+```
+username:hash => hashcat --username
+```
+
 hashcat -O: optimized run, can make a HUGE difference depending on the hashing algorithm.
