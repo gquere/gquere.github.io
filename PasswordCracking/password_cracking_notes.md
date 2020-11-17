@@ -1,3 +1,7 @@
+---
+title: Basics of password cracking
+---
+
 OpenLDAP formats
 ================
 
