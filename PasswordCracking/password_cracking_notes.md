@@ -21,7 +21,7 @@ OpenLDAP dumps from ldapsearch may contain a variety of hash algorithms and form
 ```(*)```: Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```  
 ```(**)```: Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.  
 ```(***)```: PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.  
-```(****)````: PBKDF2 for JtR is in the hex format, separated by dots. e.g. ```username:$pbkdf2-hmac-sha512$iterations.salt.hash```
+```(****)```: PBKDF2 for JtR is in the hex format, separated by dots. e.g. ```username:$pbkdf2-hmac-sha512$iterations.salt.hash```
 
 Here are my converters for [John](https://gist.github.com/gquere/9530ea12fc76bac6a46b9a1806e8868c) and [hashcat](https://gist.github.com/gquere/d810dd00f960e9c7226a244def0d3d56).
 
