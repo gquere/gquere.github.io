@@ -15,12 +15,15 @@ OpenLDAP dumps from ldapsearch may contain a variety of hash algorithms and form
 |{SSHA}          | 111          | Salted-SHA1      |
 |{SSHA512}       | 1711         | SSHA512          |
 |{CRYPT}         | 1800 (**)    | sha512crypt (**) |
-|{PBKDF2-SHA512} | 12100 (***)  |                  |
+|{PBKDF2-SHA512} | 12100 (***)  | pbkdf2-hmac-sha512 (****) |
 
 
 ```(*)```: Raw-SHA256 and Raw-SHA512 are exported in base64 format, but are expected in hex format. For hashcat, that's ```username:hash``` and for JtR ```username:$SHA256$hash```  
 ```(**)```: Simply remove the '{CRYPT}' string. Note that dots '.' are replacing the '+' characters and are expected to stay like so.  
 ```(***)```: PBKDF2 for hashcat requires several modifications: in the base64 content, the dots '.' become '+'. Also replace '{PBKDF2-SHA512}' with 'sha512:'. Also replace '$' with ':'.  
+```(****)````: PBKDF2 for JtR is in the hex format, separated by dots. e.g. ```username:$pbkdf2-hmac-sha512$iterations.salt.hash```
+
+Here are my converters for [John](https://gist.github.com/gquere/9530ea12fc76bac6a46b9a1806e8868c) and [hashcat](https://gist.github.com/gquere/d810dd00f960e9c7226a244def0d3d56).
 
 
 Where to get wordlists?
@@ -99,6 +102,12 @@ Running John without specifying a dict will cause it to run some interesting bas
 
 formats
 -------
+
+This command gives test vectors for the desired format, which is especially useful when trying to convert a hash format to another:
+```
+john --format=<format> --list=format-tests
+```
+
 ```
 redmine: dynamic_1501
 user:password$salt
@@ -109,7 +118,7 @@ Hashcat specifics
 
 Installation
 ------------
-Use the NVidia official driver. May require you to sometimes hold the kernel back when the ABI is changing (as is currently the case between 5.8 and 5.9). Follow the official installation procedure at []().
+Use the NVidia official driver. May require you to sometimes hold the kernel back when the ABI is changing (as is currently the case between 5.8 and 5.9). [Follow the official installation procedure]().
 
 Hash format
 -----------
