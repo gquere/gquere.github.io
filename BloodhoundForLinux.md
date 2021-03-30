@@ -1,7 +1,7 @@
 ---
 title: Bloodhound for Linux
 ---
-{:.no_toc}
+{:no_toc}
 
 Bloodhound
 ==========
