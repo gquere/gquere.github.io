@@ -61,7 +61,8 @@ These are easily fed in bulk to neo4j:
 ```
 
 And here is the result in bloodhound:
-![relation](./BloodHoundLinux/machine_rdp.png)
+
+![relation](./BloodHoundLinux/view.png)
 
 The full conversion script is [found here](https://github.com/gquere/bloodhound_linux/blob/master/ldif_to_neo4j.py). It may or may not be very hacky and ugly!
 
@@ -72,6 +73,7 @@ Going further with local pubkeys
 This leans on the blue team side of things because it requires root access on all machines, but it's possible to retrieve all private and public keys on all machines and create further relations between computers.
 
 If say a private key is found on a server, and the matching public key is part of the ```authorized_keys``` of another computer, then a new relation can be created between the two:
+
 ![relation](./BloodHoundLinux/machine_rdp.png)
 
 Implementing this in the script is left as an exercise for readers ;)
