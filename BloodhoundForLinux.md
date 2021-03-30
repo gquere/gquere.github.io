@@ -1,8 +1,12 @@
 ---
 title: Bloodhound for Linux
 ---
+{:.no_toc}
 
-Bloodhound is probably *the* most effective tool for auditing Windows environments, used by both red and blue teams alike.
+Bloodhound
+==========
+
+[Bloodhound](https://github.com/BloodHoundAD/BloodHound) is probably *the* most effective tool for auditing Windows environments, used by both red and blue teams alike.
 
 But have you heard of [Bloodhound for Linux](https://github.com/gquere/bloodhound_linux)? Let's expand a bit.
 
