@@ -22,7 +22,7 @@ ldapsearch -x -H ldaps://xx.xx.xx.xx -b 'dc=sample,dc=com' -D 'cn=jsmith,ou=user
 
 The syntax often bewilders newcomers:
 
-* -H is the URL of the LDAP, the computer that hosts the LDAP service
+* -H is the URL of the LDAP, the computer that hosts the LDAP service. This information is found in one of the possible LDAP configuration files under /etc/
 * -b is the *searchbase*, the root of the tree we want to dump. To retrieve the most data, use the root
 * -D is the *binddn*, the LDAP account (user or machine) which is used to authenticate to the LDAP
 
