@@ -16,7 +16,7 @@ LDAP dumps
 
 During engagements in Linux environments it's easy to retrieve an OpenLDAP dump, also known as a LDIF file.
 Once any computer member of the LDAP has been rooted (or if you previously retrieved an account and its password) it's then possible to directly query the directory information service and to retrieve the public information it contains:
-```
+```bash
 ldapsearch -x -H ldaps://xx.xx.xx.xx -b 'dc=sample,dc=com' -D 'cn=jsmith,ou=users,dc=sample,dc=com' -W -z 9999999 > dump.ldif
 ```
 
@@ -44,7 +44,7 @@ It basically boils down to creating three lists:
 * a list of all computers, each comptuter contains a list of groups that can access it
 
 Then these are formatted in a series of bloodhound-compatible cypher queries:
-```
+```json
 (varJSMITH:User:Base {
         name:"JSMITH",
         displayname:"John Smith",
@@ -60,7 +60,7 @@ Then these are formatted in a series of bloodhound-compatible cypher queries:
 ```
 
 These are easily fed in bulk to neo4j:
-```
+```bash
 ./ldif_to_neo4j.py ./sample.ldif | cypher-shell -u neo4j -p password
 ```
 
