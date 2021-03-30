@@ -44,7 +44,7 @@ It basically boils down to creating three lists:
 * a list of all computers, each comptuter contains a list of groups that can access it
 
 Then these are formatted in a series of bloodhound-compatible cypher queries:
-```json
+```cypher
 (varJSMITH:User:Base {
         name:"JSMITH",
         displayname:"John Smith",
