@@ -37,13 +37,13 @@ Formatting the dump
 
 There are various formats of LDAP, so yours may (will) require a bit (a lot) of tuning in the conversion script.
 
-It basically boils down to creating three lists:
+It basically boils down to creating and populating three lists:
 
 * a list of all users
 * a list of all groups, each group contains a list of users that are members of this group
 * a list of all computers, each comptuter contains a list of groups that can access it
 
-Then these are formatted in a series of bloodhound-compatible cypher queries:
+These lists are the formatted to a series of bloodhound-compatible cypher queries:
 ```cypher
 (varJSMITH:User:Base {
         name:"JSMITH",
@@ -59,7 +59,7 @@ Then these are formatted in a series of bloodhound-compatible cypher queries:
 ...
 ```
 
-These are easily fed in bulk to neo4j:
+They are then easily fed in bulk to neo4j:
 ```bash
 ./ldif_to_neo4j.py ./sample.ldif | cypher-shell -u neo4j -p password
 ```
@@ -67,6 +67,8 @@ These are easily fed in bulk to neo4j:
 And here is the result in bloodhound:
 
 ![relation](./BloodHoundLinux/view.png)
+
+And voilà, you may now explore an LDAP dump as a graph, which is so much more convenient that reading a list of lists.
 
 The full conversion script is [found here](https://github.com/gquere/bloodhound_linux/blob/master/ldif_to_neo4j.py). It may or may not be very hacky and ugly!
 
