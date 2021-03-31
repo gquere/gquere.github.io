@@ -29,9 +29,9 @@ The syntax often bewilders newcomers:
 
 This is basically the same as using ADExplorer or Sharphound with a domain account.
 
-The retrieved data is similar to what you'd retrieve in an AD environment: users, groups, computers and relations between these.
+The retrieved data is similar to what you'd get in an AD environment: users, groups, computers and relations between these.
 
-It contains a list of entries which describe the attributes of the entity. I've added a minimalist [sample LDIF](https://github.com/gquere/bloodhound_linux/blob/master/sample.ldif) to play with.
+The LDIF contains a list of entries which describe the attributes of the entity. I've added a minimalist [sample LDIF](https://github.com/gquere/bloodhound_linux/blob/master/sample.ldif) to play with.
 ```LDIF
 dn: cn=jsmith,ou=users,dc=sample,dc=com
 givenName: John
