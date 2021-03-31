@@ -31,6 +31,35 @@ This is basically the same as using ADExplorer or Sharphound with a domain accou
 
 The retrieved data is similar to what you'd retrieve in an AD environment: users, groups, computers and relations between these.
 
+It contains a list of entries which describe the attributes of the entity. I've added a minimalist [sample LDIF](https://github.com/gquere/bloodhound_linux/blob/master/sample.ldif) to play with.
+```LDIF
+dn: cn=jsmith,ou=users,dc=sample,dc=com
+givenName: John
+objectClass: inetOrgPerson
+sn: Smith
+cn: jsmith
+
+dn: cn=databaseadmins,ou=groups,dc=sample,dc=com
+description: database admins
+objectClass: posixGroup
+cn: databaseadmins
+memberUid: jsmith
+memberUid: kmiller
+
+dn: cn=DB001,ou=netgroup,dc=sample,dc=com
+objectClass: Host
+cn: DB001
+memberNisNetgroup: databaseadmins
+memberNisNetgroup: databaseusers
+
+dn: cn=DB001_repl,ou=netgroup,dc=sample,dc=com
+objectClass: Host
+cn: DB001_repl
+memberNisNetgroup: databaseadmins
+```
+
+In this example, John Smith, whose account is ```jsmith```, is a member of the ```databaseadmins``` group, which has SSH access to both computers DB001 and DB001_repl.
+
 
 Formatting the dump
 ===================
@@ -43,7 +72,7 @@ It basically boils down to creating and populating three lists:
 * a list of all groups, each group contains a list of users that are members of this group
 * a list of all computers, each comptuter contains a list of groups that can access it
 
-These lists are the formatted to a series of bloodhound-compatible cypher queries:
+These lists are then formatted to a series of bloodhound-compatible cypher queries:
 ```cypher
 (varJSMITH:User:Base {
         name:"JSMITH",
