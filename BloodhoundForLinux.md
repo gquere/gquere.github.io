@@ -1,5 +1,5 @@
 ---
-title: Bloodhound for Linux
+title: Using Bloodhound in Linux environments
 ---
 {:no_toc}
 
