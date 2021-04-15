@@ -70,7 +70,7 @@ It basically boils down to creating and populating three lists:
 
 * a list of all users
 * a list of all groups, each group contains a list of users that are members of this group
-* a list of all computers, each comptuter contains a list of groups that can access it
+* a list of all computers, each computer contains a list of groups that can access it
 
 These lists are then formatted to a series of bloodhound-compatible cypher queries:
 ```cypher
