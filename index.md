@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Barebox Security Advisory](https://gist.github.com/gquere/816dfadbad98745090034100a8a651eb)
 * [Tunneling inside of RDP](./RDPTunneling.md)
 * [Bloodhound for Linux](./BloodhoundForLinux.md)
 * [Basics of password cracking](./password_cracking_notes.md)
