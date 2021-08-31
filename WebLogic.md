@@ -23,8 +23,12 @@ Then deploy on the web interface. First enter the deployment menu, second lock t
 ![lock and edit](./WebLogic/wl.PNG)
 
 
-Unauthenticated RCE CVE-2020-14882
-==================================
+Unauthenticated RCE CVE-2020-14882 (fall 2020)
+==============================================
+[Official Advisory](https://www.oracle.com/security-alerts/alert-cve-2020-14750.html)
+
+Affected versions: 10.3.6.0.0, 12.1.3.0.0, 12.2.1.3.0, 12.2.1.4.0, 14.1.1.0.0
+
 There are loads of other RCEs spanning 2017-2020 but this one is so easy and powerful it kinda renders all the other exploits obsolete.
 
 If Tangosol is present on the target (versions >=12 usually) then direct remote code execution is achieved:
