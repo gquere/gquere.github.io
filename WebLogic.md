@@ -68,8 +68,8 @@ Offline
 -------
 On the compromised host, recover these two files:
 
-* SerializedSystemIni.dat: this is the decryption key in binary format so you usually can't grab it using LFI...
-* boot.properties: contains encrypted user and password values
+* ```SerializedSystemIni.dat```: this is the decryption key in binary format so you usually can't grab it using LFI...
+* ```boot.properties```: contains encrypted user and password values
 
 Decrypt using [this python script](https://gist.github.com/gquere/b331d9a8f0c0ffc8ac1fb44123aa8335).
 
