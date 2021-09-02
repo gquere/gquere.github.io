@@ -418,9 +418,11 @@ Takeaways
 
 Pentest notes
 =============
+
 Getting version number
 ----------------------
 
+CGI ```get_cmu``` replies with server's version:
 ```
 curl -k -s 'https://xxx/cgi-bin/get_cmu?level=1'
 ```
@@ -428,23 +430,40 @@ curl -k -s 'https://xxx/cgi-bin/get_cmu?level=1'
 Default passwords
 -----------------
 
-```root:nasadmin
+```
+root:nasadmin
 nasadmin:nasadmin
-sysadmin:sysadmin```
+sysadmin:sysadmin
+```
 
 Timeline
 ========
+
 2020-09-20: discovery
+
 2020-09-22: > first barch of vulnerabilities sent to DELL PSIRT
+
 2020-09-22: < Vendor ACK, cases PSRC-14111, PSRC-14112, PSRC-14113, PSRC-14114, PSRC-14115, PSRC-14116, PSRC-14117 and PSRC-14118 opened
+
 2020-09-28: > more vulnerabilities reported
+
 2020-09-28: < Vendor ACK, cases PSRC-14198, PSRC-14199, PSRC-14200 and PSRC-14201 opened
+
 2020-10-29: < Vendor confirms all vulnerabilities applicable except PSRC-14114 (patched)
+
 2020-12-10: > ask if standard 90 days disclosure will be missed; ask for CVEs to be assigned
+
 2020-12-18: < Vendor replies that fixes will be available Q3 2021; no CVEs assigned yet
+
 2021-06-10: > inform that full disclosure will take place on September 1st, 2021
+
 2021-07-06: < Vendor requests precisions on some of the vulns; Vendor informs that next release is pushed to March 2022
+
 2021-07-07: > answer questions about some of the vulns/scripts
+
 2021-08-23: < Vendor informs that next release is pulled to November 2021
+
 2021-09-01: > ask for CVEs to be assigned (again)
+
 2021-09-02: > FD
+
