@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Dell EMC VNX Security Advisory](./VNX_advisory)
 * [WebLogic Pentest Notes](./WebLogic.md)
 * [Barebox Security Advisory](https://gist.github.com/gquere/816dfadbad98745090034100a8a651eb)
 * [Tunneling inside of RDP](./RDPTunneling.md)
