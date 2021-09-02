@@ -445,7 +445,7 @@ Timeline
 ========
 
 2020-09-20: discovery  
-2020-09-22: > first barch of vulnerabilities sent to DELL PSIRT  
+2020-09-22: > first batch of vulnerabilities sent to DELL PSIRT  
 2020-09-22: < Vendor ACK, cases PSRC-14111, PSRC-14112, PSRC-14113, PSRC-14114, PSRC-14115, PSRC-14116, PSRC-14117 and PSRC-14118 opened  
 2020-09-28: > more vulnerabilities reported  
 2020-09-28: < Vendor ACK, cases PSRC-14198, PSRC-14199, PSRC-14200 and PSRC-14201 opened  
