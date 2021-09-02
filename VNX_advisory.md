@@ -38,6 +38,8 @@ Results in:
 -rw-r--r-- 1 apache apache       0 Sep 22 13:45 rce
 ```
 
+### Suggested fix
+Add a regexp check on the username, ```[a-zA-Z0-9]```.
 
 Unauthenticated Restricted File read/write through path traversal
 -----------------------------------------------------------------
@@ -197,6 +199,9 @@ The script above will generate thousands of these events in ```/nas/http/logs/ss
 [Mon Sep 28 13:45:35 2020] [error] access to /nas/tomcat/webapps/ROOT/downloadFile failed for xx.xx.xx.xx, reason: Message <possibly altered ticket> repeated last 20 times
 [Mon Sep 28 13:45:35 2020] [error] access to /nas/tomcat/webapps/ROOT/downloadFile failed for xx.xx.xx.xx, reason: Message <possibly altered ticket> repeated last 20 times
 ```
+
+### Suggested fix
+Just bump ```secret.txt``` to a 10-digit value, which ought to render bruteforcing impossible.
 
 Remote code execution as root
 -----------------------------
