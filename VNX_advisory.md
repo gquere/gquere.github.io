@@ -1,5 +1,9 @@
-Advisory: Multiple vulnerabilities in EMC VNX NAS 8.1.9-232
-===========================================================
+---
+title: Advisory: Multiple vulnerabilities in EMC VNX NAS 8.1.9-232
+---
+
+Vulnerabilities Discovered
+==========================
 
 Critical: Unauthenticated Remote Code Execution
 -----------------------------------------------
@@ -402,7 +406,7 @@ uid=48(apache) gid=48(apache) euid=0(root) egid=0(root) groups=48(apache)
 
 
 Takeaways
----------
+=========
 
 * validate all user input using a regex or a whitelist
 * do not rely on user input when performing shell, database or filesystem operations
@@ -413,14 +417,16 @@ Takeaways
 
 
 Pentest notes
--------------
-### Getting version number
+=============
+Getting version number
+----------------------
 
 ```
 curl -k -s 'https://xxx/cgi-bin/get_cmu?level=1'
 ```
 
-### Default passwords
+Default passwords
+-----------------
 
 ```root:nasadmin
 nasadmin:nasadmin
