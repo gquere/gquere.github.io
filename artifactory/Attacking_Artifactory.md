@@ -208,6 +208,15 @@ Where:
 This tool I wrote can be used offline to decrypt Artifactory secrets: [ArtifactoryDecryptor](https://github.com/gquere/ArtifactoryDecryptor).
 
 
+### Local secrets
+Local secrets such as the database password are encrypted using the ```master.key``` file using either AES128 or AES256, in CBC mode. The key is stored as a hexadecimal string.
+
+The secrets are formatted as such:
+
+* ```JE``` denotes a master key encrypted secret
+* The rest is the base58 encoding of ```IV_SIZE|IV|secret|CRC```
+
+
 Defending Artifactory
 =====================
 If you're the blue team or an Artifactory admin, by now you should have a pretty good idea of what to do:
