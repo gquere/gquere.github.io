@@ -39,7 +39,7 @@ mysql .*-p
 mysql .*--password
 PGPASSWORD                      // environment variable to set the psql password on the commandline
 RSYNC_PASSWORD                  // environment variable to set the rsync password on the commandline
-BEGIN PRIVATE
+BEGIN .*PRIVATE
 [^a-zA-Z0-9]7z[ zr].*-p[^ ]     // password protected 7z files
 unzip .*-P                      // password protected zip files
 mount .*-o.*password=           // CIFS share mounted with a username/password
@@ -49,6 +49,9 @@ mongo .*-p
 cqlsh .*-p 
 ldapsearch .*-w 
 ldapsearch .*-y 
+X-Vault-Token
+vault login 
+VAULT_TOKEN
 ```
 
 Please submit your own favourites :)
