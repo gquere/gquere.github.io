@@ -44,6 +44,11 @@ curl http://localhost:8081/artifactory/ui/repodata?deploy=true
 {"repoList":["artifactory-build-info","example-repo-local"]}
 ```
 
+In later versions the repodata endpoint seems to have been moved to this URL:
+```
+http://localhost:8081/artifactory/ui/api/v1/ui/repodata?deploy=true
+```
+
 If there are any ```repoKey``` entries in the request, anonymous can deploy to these, which is really really bad. You definitely should be authenticated to deploy any files.
 
 This can be generalized to other accounts once you get a password or token for them.
