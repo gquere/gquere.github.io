@@ -5,7 +5,7 @@ title: Security Advisory // Multiple vulnerabilities in EMC VNX NAS 8.1.9-232
 Vulnerabilities Discovered
 ==========================
 
-Critical: Unauthenticated Remote Code Execution
+CVE-2021-36287: Critical: Unauthenticated Remote Code Execution
 -----------------------------------------------
 The perl module ```/nas/http/scripts/Apache/TicketLogin.pm``` does not sanitize GET user input before passing these parameters to a function that passes a concatenated string to the shell:
 
@@ -41,7 +41,7 @@ Results in:
 ### Suggested fix
 Add a regexp check on the username, ```[a-zA-Z0-9]```.
 
-Unauthenticated Restricted File read/write through path traversal
+CVE-2021-36288: Unauthenticated Restricted File read/write through path traversal
 -----------------------------------------------------------------
 The shell script ```/nas/http/bin/link_launch_user_details``` does not sanitize GET user input and notably fails to verify that the supplied file parameter is in the expected directory once the path has been fully resolved:
 
@@ -88,7 +88,7 @@ Results in:
 test_test_test_test
 ```
 
-Critical: Authentication bypass
+CVE-2021-36289: Critical: Authentication bypass
 -------------------------------
 A combination of vulnerabilities lets remote unauthenticated attackers authenticate to the webserver as any user by forging a cookie.
 
@@ -203,7 +203,7 @@ The script above will generate thousands of these events in ```/nas/http/logs/ss
 ### Suggested fix
 Just bump ```secret.txt``` to a 10-digit value, which ought to render bruteforcing impossible.
 
-Remote code execution as root
+CVE-2021-36294: Remote code execution as root
 -----------------------------
 The file ```/nas/http/bin/runclicmd``` checks whether the advertised user is root:
 ```shell
@@ -228,7 +228,7 @@ groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel)
 ```
 
 
-Remote code execution as unprivileged user by bypassing filters
+CVE-2021-36295: Remote code execution as unprivileged user by bypassing filters
 ---------------------------------------------------------------
 Still in ```/nas/http/bin/runclicmd```, various checks are performed if the user is anyone but root:
 ```shell
@@ -266,7 +266,7 @@ There are two checks:
 It's possible to bypass both checks by passing ```. script```, where the ```.``` will build a valid path and will afterwards be recognized as ```source```. This is probably exploitable by first uploading an arbitrary script using the ```DownloadFile``` CGI first (untested).
 
 
-Remote code execution as unprivileged user by injecting variables
+CVE-2021-36296: Remote code execution as unprivileged user by injecting variables
 -----------------------------------------------------------------
 (Credits to Raphael Geissert).
 
