@@ -32,8 +32,7 @@ Since mid-2018 tokens are stored hashed in the user configuration file, under ``
 
 The token itself is generated from the UI and has to be immediately copied since locally only its hash is stored.
 
-This is an example token:
-```1147c3b70068c7b5573342ebb6ddc7f6ae```
+This is an example token: ```1147c3b70068c7b5573342ebb6ddc7f6ae```
 
 It consists of two parts:
 
