@@ -113,6 +113,11 @@ Applicable to:
 [CVE-2019-15000 PoC here.](https://github.com/86zhou/Poc/blob/master/Bitbucket/CVE-2019-15000.py)
 
 
+### CVE-2022-36804: Unauthenticated RCE
+
+[Advisory and exploit](https://blog.assetnote.io/2022/09/14/rce-in-bitbucket-server/)
+
+
 Gitlab vulnerabilities
 ----------------------
 
