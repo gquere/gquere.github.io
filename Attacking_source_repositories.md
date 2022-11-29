@@ -52,6 +52,7 @@ ldapsearch .*-y
 X-Vault-Token
 vault login 
 VAULT_TOKEN
+erlang.cookie
 ```
 
 Please submit your own favourites :)
