@@ -1,5 +1,5 @@
 ---
-title: The oldest privesc: injecting careless administrators\' terminals using TTY pushback
+title: The oldest privesc\: injecting careless administrators' terminals using TTY pushback
 ---
 
 This trick is possibly the oldest security bug that still exists today, it's been traced [as far back as 1985](https://web.archive.org/web/20031005121525/https://securitydigest.org/unix/archive/015).
