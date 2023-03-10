@@ -1,5 +1,5 @@
 ---
-title: The oldest privesc: injecting careless administrators' terminals using TTY pushback
+title: The oldest privesc: injecting careless administrators\' terminals using TTY pushback
 ---
 
 This trick is possibly the oldest security bug that still exists today, it's been traced [as far back as 1985](https://web.archive.org/web/20031005121525/https://securitydigest.org/unix/archive/015).
@@ -38,6 +38,9 @@ for char in sys.argv[1] + '\n':
 
 We're sending SIGSTOP to the lowpriv shell to get the focus back to its parent, the root shell.
 Then sending the characters one by one using the TIOCSTI ioctl injects them into the root shell as if they were input manually, until '\n' is sent which executes the command.
+
+![get root or go home](./TTYPushBack/root.PNG)
+
 And that's it, you're now root. Devilishly simple.
 
 
