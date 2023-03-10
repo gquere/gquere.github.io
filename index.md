@@ -2,7 +2,7 @@
 title: Home
 ---
 
-* [The oldest and mostly forgotten privesc trick in the book: injecting careless administrators' terminals using TTY pushback](./TTYPushback.md)
+* [The oldest privesc: injecting careless administrators' terminals using TTY pushback](./TTYPushback.md)
 * [Decrypting Informatica secrets](./Informatica.md)
 * [About Jenkins Tokens](./JenkinsTokens.md)
 * [Dell EMC VNX Security Advisory](./VNX_advisory.md)

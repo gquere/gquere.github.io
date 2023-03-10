@@ -1,5 +1,5 @@
 ---
-title: The oldest and mostly forgotten privesc trick in the book: injecting careless administrators' terminals using TTY pushback
+title: The oldest privesc: injecting careless administrators' terminals using TTY pushback
 ---
 
 This trick is possibly the oldest security bug that still exists today, it's been traced [as far back as 1985](https://web.archive.org/web/20031005121525/https://securitydigest.org/unix/archive/015).
@@ -14,14 +14,14 @@ Why it works
 The TIOCSTI ioctl can insert bytes in the tty's input queue. It is used to simulate terminal input.
 
 When running ```su lowpriv_user```, by default no new pty is allocated:
-![PTY stays the same](./TTYPushBack/pty_unchanged.png)
+![PTY stays the same](./TTYPushBack/pty_unchanged.PNG)
 
 Therefore since we're still in the same pty, input can be sent directly *to the parent shell* to execute commands in its context.
 
 
 Make it work
 ============
-Consider this python sample and assume it's automatically being run at logon from .bashrc:
+Consider this python sample and assume it's automatically being run at logon from the .bashrc of a technical account, such as postgres, to which the root user changes by typing ```su - postgres```:
 ```python
 #!/usr/bin/env python3
 import fcntl
@@ -65,7 +65,7 @@ From su's manpage:
 ```
 
 Here's the protection in action (```fg``` has been manually inputed to return to lowpriv's shell, notice how the command was "buffered" until we came back to it):
-![PTY has changed](./TTYPushBack/pty_changed.png)
+![PTY has changed](./TTYPushBack/pty_changed.PNG)
 
 Note that RHEL7 does not have the option, whereas RHEL8 does.
 
