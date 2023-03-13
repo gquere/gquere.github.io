@@ -2,6 +2,8 @@
 title: Decrypting Informatica secrets
 ---
 
+[First, my tool to decrypt Informatica secrets.](https://gist.github.com/gquere/206a5a7fe8bb26a8243ea2bb827a8bb6)
+
 During a pentest I got access to the database behind an [Informatica](https://www.informatica.com/) cluster. The DB was Oracle, but I think that PSQL also exists.
 
 Passwords are stored in the ```POU_PASSWORD``` field of the ```PO_USERINFO``` table.
