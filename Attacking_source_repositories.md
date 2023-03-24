@@ -52,7 +52,9 @@ ldapsearch .*-y
 X-Vault-Token
 vault login 
 VAULT_TOKEN
+secret_id
 erlang.cookie
+[^a-zA-Z0-9]11[0-9a-f]\{32\}[^a-zA-Z0-9]  // jenkins tokens
 ```
 
 Please submit your own favourites :)
