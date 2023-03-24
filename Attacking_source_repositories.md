@@ -55,6 +55,12 @@ VAULT_TOKEN
 secret_id
 erlang.cookie
 [^a-zA-Z0-9]11[0-9a-f]\{32\}[^a-zA-Z0-9]  // jenkins tokens
+jnlpUrl .* -secret                        // jenkins agent
+```
+
+Copy and paste regexp:
+```
+ngp -re '://[a-zA-Z0-9_-]\+:[^/@]\+@\|curl .*-u \|curl .*--user \|wget .*--password\|wget .*--http-password\|wget .*--ftp-password\|wget .*--proxy-password\|echo .*|\s*passwd\|echo .*|\s*chpasswd\|Authorization.*:.*Basic\|Authorization.*:.*Bearer\|docker login .*-p\|<password>[^<]\+</password>\|mysql .*-p\|mysql .*--password\|PGPASSWORD\|RSYNC_PASSWORD\|BEGIN .*PRIVATE\|[^a-zA-Z0-9]7z[ zr].*-p[^ ]\|unzip .*-P\|mount .*-o.*password=\|jfrog .*--password=\|jfrog .*--apiKey=\|mongo .*-p\|cqlsh .*-p\|ldapsearch .*-w\|ldapsearch .*-y\|sshpass\|X-Vault-Token\|secret_id\|VAULT_TOKEN\|vault login\|erlang.cookie\|secret_id\|[^a-zA-Z0-9]11[0-9a-f]\{32\}[^a-zA-Z0-9]\|jnlpUrl .* -secret '
 ```
 
 Please submit your own favourites :)
