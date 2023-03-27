@@ -14,7 +14,7 @@ Thus the password of the Patrol account can be decrypted:
 ![decrypt](./Patrol/decrypt.png)
 
 A valid Patrol account can be used to authenticate to the service and remotely execute code:
-![exec](./Patrol/rce.png)
+![exec](./Patrol/exec.png)
 
 ## Editor response
 According to the editor this is not a vulnerability.
