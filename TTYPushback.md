@@ -82,7 +82,7 @@ Note that the ```su``` command is not the only one affected by the bug, it's a b
     after the main program has finished executing.  By running the command in a separate pseudo-terminal, this attack is no longer possible.  This flag is off by default.
 ```
 
-The ioctl also has been restricted for a number of years in grsecurity, under the name GRKERNSEC_HARDEN_TTY (2016?).
+The ioctl also has been restricted [since 2016 in grsecurity](https://github.com/linux-scraping/linux-grsecurity/blame/grsec-test/grsecurity/Kconfig#L891), under the name GRKERNSEC_HARDEN_TTY.
 
 The Linux kernel 6.2 also has introduced an [optional mechanism](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=83efeeeb3d04) to protect against it.
 
