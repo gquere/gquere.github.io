@@ -2,7 +2,7 @@
 title: Home
 ---
 
-* [Patrol Security Advisory (1/2)](./PatrolAdvisory001.md)
+* [Patrol Security Advisory](./PatrolAdvisory.md)
 * [The oldest privesc: injecting careless administrators' terminals using TTY pushback](./TTYPushback.md)
 * [Decrypting Informatica secrets](./Informatica.md)
 * [About Jenkins Tokens](./JenkinsTokens.md)
