@@ -58,7 +58,7 @@ PatrolCli -host xxx +RESTART
 
 Editor response
 ---------------
-According to the editor these are not a vulnerabilities.
+According to the editor these are not vulnerabilities: "These are not vulnerabilities for us as we have provided the option to implement the authentication".
 
 Timeline
 --------
