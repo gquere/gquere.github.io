@@ -7,8 +7,8 @@ Patrol's [default configuration](https://docs.bmc.com/docs/PATROLAgent/107/secur
 
 If your organisation uses this default setting, it should be changed ASAP as this makes the agent subject to two unauthenticated vulnerabilities resulting in remote code execution.
 
-Remote secrets leak using Patrol's pconfig (<22.1.00)
------------------------------------------------------
+CVE-2023-34258:Remote secrets leak using Patrol's pconfig (<22.1.00)
+--------------------------------------------------------------------
 
 The configuration is remotely queried using the ```pconfig``` binary. The configuration contains the encrypted password of the local Patrol user:
 ![get pass](./Patrol/get.png)
@@ -24,8 +24,8 @@ A valid Patrol account can be used to authenticate to the service and remotely e
 This vulnerability is mitigated in versions >=22.1.00 since the encryption key has been diversified.
 
 
-Remote code excution using Patrol's pconfig
--------------------------------------------
+CVE-2023-34257:Remote code excution using Patrol's pconfig
+----------------------------------------------------------
 
 The agent's configuration can be remotely updated using the ```pconfig``` binary.
 
