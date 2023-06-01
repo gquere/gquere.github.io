@@ -2,7 +2,7 @@
 title: Decrypting Informatica secrets
 ---
 
-[First, my tool to decrypt Informatica secrets.](https://gist.github.com/gquere/206a5a7fe8bb26a8243ea2bb827a8bb6)
+[First, my tool to decrypt Informatica secrets.](https://github.com/gquere/informatica_decrypt)
 
 During a pentest I got access to the database behind an [Informatica](https://www.informatica.com/) cluster. The DB was Oracle, but I think that PSQL also exists.
 
@@ -21,7 +21,7 @@ Some more notes for posterity:
 Informatica 10.4
 ================
 
-This version uses AES128. The key is contained in bytes [4:20] of the ```siteKey``` file. The IV is constant and is the same as in the ```pmpasswd``` utility. 10 mins in GDB and you'll find it.
+This version uses AES128. The key is contained in bytes [4:20] of the ```siteKey``` file. The IV is constant and is the same as in the ```pmpasswd``` utility.
 
 The ciphertext of the password is stored in base64 format.
 
