@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Informatica Security Advisory](./InformaticaAdvisory.md)
 * [Patrol Security Advisory](./PatrolAdvisory.md)
 * [The oldest privesc: injecting careless administrators' terminals using TTY pushback](./TTYPushback.md)
 * [Decrypting Informatica secrets](./Informatica.md)
