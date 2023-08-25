@@ -133,6 +133,8 @@ This forced me to spend way too much time to understand the protocols in order t
 
 Takeaways
 =========
-The use of a discrete (physical) TPM actually decreases the security of the system, using a fTPM would solve the problem.
+The use of a discrete (physical) TPM does not increase the security of the system *as one would expect* and creates the illusion of security.
 
-If the discrete TPM has to be used, then a PIN or passphrase on BitLocker is necessary.
+To protect against this attack you could either use a fTPM or if the discrete TPM has to be used, then it is necessary to set a PIN or passphrase on BitLocker ([as recommmended by Microsoft](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/prepare-your-organization-for-bitlocker-planning-and-policies#what-areas-of-the-organization-need-a-more-secure-level-of-data-protection)).
+
+Edit: this article sparked [a discussion on HackerNews](https://news.ycombinator.com/item?id=37249623), if you're interested in the subject you might learn much more from them. I have altered the conclusion thanks to feedback I got there.
