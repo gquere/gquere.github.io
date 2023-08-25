@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Bypassing Bitlocker using a cheap logic analyzer on a Lenovo laptop](./BypassingBitlocker.md)
 * [Informatica Security Advisory](./InformaticaAdvisory.md)
 * [Patrol Security Advisory](./PatrolAdvisory.md)
 * [The oldest privesc: injecting careless administrators' terminals using TTY pushback](./TTYPushback.md)
