@@ -58,12 +58,6 @@ The mirrors are declared as a list in the configuration file of the Docker daemo
 
 The internal docker mirror might for instance be served by Artifactory as a remote repository. Or it could be a simple Docker [Registry](https://hub.docker.com/_/registry).
 
-The RedHat case
----------------
-The Docker package published by Red Hat is a fork that adds a modification [refused by Docker](https://github.com/moby/moby/issues/33069) that permits overloading the default Docker Hub registry by using ```--add-registry``` or by configuring ```/etc/containers/registries.conf```.
-
-This opens up to even more misconfigurations and should never be used, even according to [RedHat themselves](https://www.redhat.com/en/blog/be-careful-when-pulling-images-short-name).
-
 Vulnerabilities
 ===============
 
