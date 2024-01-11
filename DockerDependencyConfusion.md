@@ -80,13 +80,34 @@ Because the remote registry is declared first, the following ```/etc/docker/daem
 
 Docker will look for the base image on docker hub first, then will fallback to the private registry. This is only exploitable if the project uses internal namespaces because as previously mentioned, failing to provide a namespace would implicitly default to the ```library``` namespace, where only official images are uploaded.
 
+The exploitation is simple enough: create an account on Docker Hub, register the namespace (for instance ```gquere```) and upload the malicious image (for instance ```hello-world```). Then wait until the image is ran and congrats, you've gained a foothold in your target's internal network!
+
+```bash
+docker pull gquere/hello-world
+Using default tag: latest
+latest: Pulling from gquere/hello-world
+04aac19631a0: Pull complete 
+Digest: sha256:2bfd53b2487e3a57200c1e3e770e72efea6fd5501272352ad65de5a476e64f8b
+Status: Downloaded newer image for gquere/hello-world:latest
+docker.io/gquere/hello-world:latest
+```
+
+Let's look at the logs:
+```
+tail -F /var/log/syslog
+Jan 11 17:27:20 debian dockerd[1887]: time="2024-01-11T17:27:20.238039078+01:00" level=debug msg="Calling HEAD /_ping"
+Jan 11 17:27:20 debian dockerd[1887]: time="2024-01-11T17:27:20.240115051+01:00" level=debug msg="Calling POST /v1.43/images/create?fromImage=gquere%2Fhello-world&tag=latest"
+Jan 11 17:27:20 debian dockerd[1887]: time="2024-01-11T17:27:20.254232378+01:00" level=debug msg="Trying to pull gquere/hello-world from http://project-docker-stages-local.mydomain.com/"
+Jan 11 17:27:20 debian dockerd[1887]: time="2024-01-11T17:27:20.472589233+01:00" level=debug msg="Fetching manifest from remote" digest="sha256:8f0710e90f4eab3d4d58bf8a88633e9c41e5a1e5e72a0df44ff578f23ec6106d" error="<nil>" remote="docker.io/gquere/hello-world:latest"
+```
+
+The malicious package has indeed been pulled from remote.
+
 To sump up, if the following conditions are met then the project is vulnerable:
 
 * two or more mirrors are configured and Docker Hub is declared first
 * the project uses one or more namespaces in their internal registry
 * this namespace is not registered on Docker Hub
-
-The exploitation is simple enough: create an account on Docker Hub, register the namespace and upload the malicious image. Congrats, you've gained a foothold in your target's internal network!
 
 Mixing registries
 -----------------
