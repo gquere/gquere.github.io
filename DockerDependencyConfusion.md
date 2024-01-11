@@ -97,11 +97,11 @@ Let's look at the logs:
 tail -F /var/log/syslog
 msg="Calling HEAD /_ping"
 msg="Calling POST /v1.43/images/create?fromImage=gquere%2Fhello-world&tag=latest"
-msg="Trying to pull gquere/hello-world from http://project-docker-stages-local.mydomain.com/"
-msg="Fetching manifest from remote" digest="sha256:8f0710e90f4eab3d4d58bf8a88633e9c41e5a1e5e72a0df44ff578f23ec6106d" error="<nil>" remote="docker.io/gquere/hello-world:latest"
+msg="Trying to pull gquere/hello-world from http://remote-docker-hub.mydomain.com/"
+msg="Fetching manifest from remote" digest="sha256:xxx" error="<nil>" remote="docker.io/gquere/hello-world:latest"
 ```
 
-The malicious package has indeed been pulled from remote.
+The malicious package has indeed been pulled from remote "docker.io".
 
 To sump up, if the following conditions are met then the project is vulnerable:
 
