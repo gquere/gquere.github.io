@@ -60,9 +60,9 @@ The internal docker mirror might for instance be served by Artifactory as a remo
 
 The RedHat case
 ---------------
-The Docker package published by Red Hat is a fork that adds a modification [refused by Docker](https://github.com/moby/moby/issues/33069) that permits overloading the default registry using ```--add-registry``` or by configuring ```/etc/containers/registries.conf```.
+The Docker package published by Red Hat is a fork that adds a modification [refused by Docker](https://github.com/moby/moby/issues/33069) that permits overloading the default Docker Hub registry by using ```--add-registry``` or by configuring ```/etc/containers/registries.conf```.
 
-This opens up to more vulnerabilities and should never be used, even according to [RedHat themselves](https://www.redhat.com/en/blog/be-careful-when-pulling-images-short-name).
+This opens up to even more misconfigurations and should never be used, even according to [RedHat themselves](https://www.redhat.com/en/blog/be-careful-when-pulling-images-short-name).
 
 Vulnerabilities
 ===============
@@ -74,11 +74,11 @@ When several registries are defined as mirrors then the order of declaration mat
 Because the remote registry is declared first, the following ```/etc/docker/daemon.json``` configuration file opens up to a dependency confusion vulnerability:
 ```json
 {
-    "registry-mirrors": ["https://remote-docker-hub.mydomain.com", "https://projet-docker-local.mydomain.com"]
+    "registry-mirrors": ["https://remote-docker-hub.mydomain.com", "https://local-docker-project.mydomain.com"]
 }
 ```
 
-Docker will look for the base image on docker hub first, then will fallback to the private registry. This is only exploitable if the project uses internal namespaces because as previously mentioned, failing to provide a namespace would implicitly default to the ```library``` namespace, where only official images are uploaded.
+Docker will look for the base image on docker hub ```remote-docker-hub``` first, then will fallback to the private registry ```local-docker-project```. This is only exploitable if the project uses internal namespaces because as previously mentioned, failing to provide a namespace would implicitly default to the ```library``` namespace, where only official images are uploaded.
 
 The exploitation is simple enough: create an account on Docker Hub, register the namespace (for instance ```gquere```) and upload the malicious image (for instance ```hello-world```). Then wait until the image is ran and congrats, you've gained a foothold in your target's internal network!
 
