@@ -6,7 +6,7 @@ What is a dependency confusion attack?
 ======================================
 A dependency confusion is a supply chain attack where an attacker is able to poison the build by forcing the build system to retrieve his malicious dependency somewhere on the internet instead of the legitimate internal dependency. All dependency confusions emanate from a misconfigured build system.
 
-An organization that doesn't want to publicly publish its packages on the internet is going to use some sort of private repository manager such as [Artifactory]() or [Nexus](). Internal projects will publish their packages on a private internal repository.
+An organization that doesn't want to publicly publish its packages on the internet is going to use some sort of private repository manager such as [Artifactory](https://jfrog.com/artifactory/) or [Nexus](https://www.sonatype.com/products/sonatype-nexus-repository). Internal projects will publish their packages on a private internal repository.
 
 If everything goes as planned then the dependency is retrieved internally:
 ![All good](./DependencyConfusion/docker_ok.png)
@@ -24,8 +24,9 @@ If you use Docker mirrors because your organisation has private repositories the
 
 Docker images
 =============
+
 Declaring dependencies
-----------------------
+-----------------------
 Base images are declared at the beginning of the Dockerfile, for instance:
 ```
 FROM alpine
@@ -35,6 +36,7 @@ FROM alpine
 This is syntactically equivalent to:
 ```
 FROM library/alpine:latest
+...
 ```
 
 Where:
@@ -45,9 +47,9 @@ Where:
 
 Docker mirrors
 --------------
-As previously mentioned the Docker Hub registry is hardcoded in the Docker binary. This is problematic if an organization does not expose build systems to the internet (which it shouldn't!). The solution is to use [Docker mirrors]( https://docs.docker.com/docker-hub/mirror/).
+As previously mentioned the Docker Hub registry is hardcoded in the Docker binary. This is problematic if an organization does not expose its build systems to the internet (which it shouldn't!). The solution is to use [Docker mirrors]( https://docs.docker.com/docker-hub/mirror/).
 
-The mirrors are declared in the configuration file of the Docker daemon, ```/etc/docker/daemon.json```:
+The mirrors are declared as a list in the configuration file of the Docker daemon, ```/etc/docker/daemon.json```:
 ```json
 {
     "registry-mirrors": ["https://remote-docker-hub.mydomain.com"]
@@ -62,6 +64,7 @@ This opens up to more vulnerabilities and should never be used, even according t
 
 Vulnerabilities
 ===============
+
 Mirror resolution order
 -----------------------
 When several registries are defined as mirrors then the order of declaration matters.
@@ -80,6 +83,8 @@ To sump up, if the following conditions are met then the project is vulnerable:
 * two or more mirrors are configured and Docker Hub is declared first
 * the project uses one or more namespaces in their internal registry
 * this namespace is not registered on Docker Hub
+
+The exploitation is simple enough: create an account on Docker Hub, register the namespace and upload the malicious image. Congrats, you've gained a foothold in your target's internal network!
 
 Mixing registries
 -----------------
