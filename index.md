@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [Dependency Confusions in Docker](./DockerDependencyConfusion.md)
 * [Control M Web Security Advisory](./ControlMWebAdvisory.md)
 * [Bypassing Bitlocker using a cheap logic analyzer on a Lenovo laptop](./BypassingBitlocker.md)
 * [Informatica Security Advisory](./InformaticaAdvisory.md)
