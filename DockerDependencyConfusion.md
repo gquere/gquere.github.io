@@ -114,4 +114,6 @@ This may however be insufficient is some borderline cases: for instance if a pro
 
 Protecting against dependency confusion in Docker
 =================================================
-The one rule to follow is to never declare the remote registry first in mirrors. If you're using infra as code (you should) then this is easily verified by SAST on your source repository.
+The first rule to follow is to never declare the remote registry first in mirrors. If you're using infra as code (you should) then this is easily verified by SAST on your source repository.
+
+Another protection is to only use fully qualified image names: ```docker run <registry>/<namespace>/<image>:<tag>```.
