@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [A case of missing bytes: bruteforcing your way through Jenkins' CVE-2024-23897](./bruteforcing_CVE-2024-23897.md)
 * [Dependency Confusions in Docker](./DockerDependencyConfusion.md)
 * [Control M Web Security Advisory](./ControlMWebAdvisory.md)
 * [Bypassing Bitlocker using a cheap logic analyzer on a Lenovo laptop](./BypassingBitlocker.md)
