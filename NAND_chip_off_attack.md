@@ -18,11 +18,13 @@ These are the tools used for the attack:
 * A 1200x digital microscope with integrated display: 30.19€
 * A 858D hot air station: 35.95€
 * An official XGecu T46 programmer and a BGA153 adapter: 96.33€
-* Some flux, grab it in a tube: 1.76€
+* Some flux, better grab it in a tube for easier application: 1.76€
 * Low temperature reballing solder paste: 2.78€
 * A reballing BGA153 stencil: 2.53€
 * A roll of solder wick: 1.29€
 * A mat to protect the family dining table: priceless
+
+If strapped for cash some components can be ignored and a XGecu clone could help bring the price down to about 100€ total.
 
 The attack
 ==========
