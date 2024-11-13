@@ -1,5 +1,5 @@
 ---
-title: The cost of a NAND chip off attack is 170.83€
+title: The cost of a NAND chip off attack is 170.87€
 ---
 
 Hardware attacks are becoming cheaper with every passing day for two reasons: first, the cost of the tools is going down and second because there is more documentation available.
