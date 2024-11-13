@@ -51,6 +51,7 @@ Otherwise there's not a lot to do, I've only had to select my chip in the list, 
 
 The measure of success is a parsable dump and a U-Boot string \o/
 ![U-Boot string in dumped firmware](./nand_chip_off/u-boot.jpg)
+
 ![binwalked firmware](./nand_chip_off/binwalk.jpg)
 
 Where to go from here
