@@ -4,7 +4,7 @@ title: The cost of a NAND chip off attack is 170.87€
 
 Hardware attacks are becoming cheaper with every passing day for two reasons: first, the cost of the tools is going down and second because there is more documentation available.
 
-Having a vague undestanding of the overall cost metrics of an attack (knowledge, money and time) is a necessary input to perform risk analysis. One might initially assume that a NAND chip-off attack is going to require an expert engineer, a few days of work and an impressive electronics lab and therefore mis-classify vulnerabilities as beyond a certain scope (page 426 of the [Common Criteria Attack Potential](https://www.commoncriteriaportal.org/files/ccfiles/CEMV3.1R5.pdf).
+Having a vague undestanding of the overall cost metrics of an attack (knowledge, money and time) is a necessary input to perform risk analysis. One might initially assume that a NAND chip-off attack is going to require an expert engineer, a few days of work and an impressive electronics lab and therefore mis-classify vulnerabilities as beyond a certain scope (page 426 of the [Common Criteria Attack Potential](https://www.commoncriteriaportal.org/files/ccfiles/CEMV3.1R5.pdf)).
 
 So how much expertise, time and money do you really need to perform a chip-off attack on a BGA NAND nowadays? Well I tried it and the expertise required is not impressive, the time was literally 30 minutes and the total cost was 170.87 euros with quite a lot of room for optimization.
 
