@@ -42,14 +42,14 @@ Lets put it in the XGecu T48 reader. On the chip there is a dot in a corner whic
 I don't really trust the software provided with the T48. I've had no success attaching the reader to a virtual machine, the driver didn't seem to work in the VM and the XGecu was appearing with an error (yellow triangle) in Windows' device manager. So I just used an offline laptop that never connects to the internet. Otherwise there is this cool open source project which I haven't tried yet: [minipro by David Griffith](https://gitlab.com/DavidGriffith/minipro) but it seems like he's mostly focused on older readers for now with support for the T46/56 being marked as experimental.
 
 This is what it looks like if no programmer is detected (that's bad):
-[No programmer detected XGecu](./nand_chip_off/no_programmer_detected.png)
+![No programmer detected XGecu](./nand_chip_off/no_programmer_detected.png)
 
 Otherwise there's not a lot to do, I've only had to select my chip in the list, then hit read. Of course 4-bit mode will be faster than 1-bit mode :)
-[XGecu NAND dumping](./nand_chip_off/dump.jpg)
+![XGecu NAND dumping](./nand_chip_off/dump.jpg)
 
 The measure of success is a parsable dump and a U-Boot string \o/
-[U-Boot string in dumped firmware](./nand_chip_off/u-boot.jpg)
-[binwalked firmware](./nand_chip_off/binwalk.jpg)
+![U-Boot string in dumped firmware](./nand_chip_off/u-boot.jpg)
+![binwalked firmware](./nand_chip_off/binwalk.jpg)
 
 Where to go from here
 =====================
