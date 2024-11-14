@@ -4,9 +4,11 @@ title: The cost of a NAND chip off attack is 170.87€
 
 Hardware attacks are becoming cheaper with every passing day for two reasons: first, the cost of the tools is going down and second because there is more documentation available.
 
+A NAND chip-off attack is an attack where the NAND memory will be physically removed from the target board to be read and possibly written to. Here we will take a look at an eMMC NAND, which is somewhat special because it's managed by an integrated controller making reading and writing an easy task, as opposed to raw NAND which is slightly more complicated. I do hope to cover the latter at another time.
+
 Having a vague undestanding of the overall cost metrics of an attack (knowledge, money and time) is a necessary input to perform risk analysis. One might initially assume that a NAND chip-off attack is going to require an expert engineer, a few days of work and an impressive electronics lab and therefore mis-classify vulnerabilities as beyond a certain scope (page 426 of the [Common Criteria Attack Potential](https://www.commoncriteriaportal.org/files/ccfiles/CEMV3.1R5.pdf)).
 
-So how much expertise, time and money do you really need to perform a chip-off attack on a BGA NAND nowadays? Well I tried it and the expertise required is not impressive, the time was literally 30 minutes and the total cost was 170.87 euros with quite a lot of room for optimization.
+So how much expertise, time and money do you really need to perform a chip-off attack on a BGA eMMC NAND nowadays? Well I tried it: the expertise required is not impressive, the time was literally 30 minutes and the total cost was 170.87 euros with quite a lot of room for optimization.
 
 ![Hardware needed](./nand_chip_off/matos.jpg)
 
@@ -29,11 +31,11 @@ If strapped for cash some components can be ignored and a XGecu clone could help
 The attack
 ==========
 
-Apply a liberal amount of flux to the targeted zone. I've started heating the surroundings at 280°C for about a minute, then cranked up the heat to 350°C. The exact numbers don't mean much because your hot air station will differ, you'll use another nozzle size and the distance from which you'll blow the air will be different also. But start on the low end to distribute the heat to all nearby components and then increase the temperature until the solder melts and becomes shiny, which might take 2-3 more minutes. Re-add some flux periodically when it's been vaporized or blown away. This process can be sped up significantly by using a heating plate to pre-heat the board.
+Apply a liberal amount of flux to the targeted zone. I've started heating the surroundings at 280°C for about a minute, then cranked up the heat to 350°C. The exact numbers don't mean much because your hot air station will differ, you'll use another nozzle size and the distance from which you'll blow the air will be different also. But start on the low end to distribute the heat to all nearby components, then increase the temperature until the solder melts and becomes shiny, which might take 2-3 more minutes. Re-add some flux periodically when it's been vaporized or blown away. This process can be sped up significantly by using a heating plate to pre-heat the board.
 
-Do not try to pry the chip off, this will undoubtedly rip some pads off and might permanently kill the board and the flash. Trust the process, push the chip gently on the side and it will eventually float off when all the solder balls have melted, at which point it's easy to pull it with tweezers.
+Do not try to pry the chip off as this will undoubtedly rip some pads off and might permanently kill the board and the flash. Trust the process, push the chip gently on the side and it will eventually float off when all the solder balls underneath have melted, at which point it's easy to pull it with tweezers.
 
-If some of the solder balls have melted together and formed blobs on the underside of chip they will need to be removed using solder wick. But in any case it's still a good practice not to skip this step. Clean the old flux using isopropyl alcohol, apply new flux and drag a strip of wick accross the chip using a soldering iron until no more bumps/grits are felt on the chip. If you have leaded solder lying around (you should!) it's always easier to add some to the area you're trying to clean because it has a lower melting point and better viscosity. It will mix with the old RoHS-compliant solder and it makes the cleaning process much easier.
+If some of the solder balls have melted together and formed blobs on the underside of chip they will need to be removed using solder wick. But in any case it's still a good practice not to skip this step. Clean the old flux using isopropyl alcohol, apply new flux and drag a strip of wick accross the chip using a soldering iron until no more bumps/grits are felt on the chip. If you have leaded solder lying around (you should!) it's always easier to add some to the area you're trying to clean because it has a lower melting point and better viscosity. It will mix with the old RoHS-compliant solder which makes the cleaning process much easier.
 
 At this point you should have a chip looking more or so like this, I've scratched mine quite a lot when cleaning it with the wick but that's no big deal:
 ![Cleaned chip](./nand_chip_off/cleaned_chip.JPG)
@@ -57,12 +59,12 @@ The measure of success is a parsable dump and a U-Boot string \o/
 Where to go from here
 =====================
 
-At this point we've basically (maybe) only recovered the firmware of the target. This might be considered to be a vulnerability in and of itself and it is tremendously useful as it enables us to find secrets, reverse engineer the produt, identify and exploit vulnerabilities. But we haven't properly achieved RCE yet.
+At this point we've basically (maybe) only recovered the firmware of the target. This might be considered to be a vulnerability in and of itself and it is tremendously useful as it enables us to find secrets, reverse engineer the product, identify and exploit vulnerabilities. But we haven't properly achieved RCE yet.
 
 The next step will depend on the firmware recovered:
 
 * If it's not cryptographically signed (encrypted in the context is a form of signature) then it's possible to simply alter the bootloader or the filesystem to recover a shell at any point.
-* If it is partially signed and encrypted, say if the bootloader, kernel and the main RO filesystem are signed but there are additional RW partitions that are not encrypted then it's sometimes possible to achieve remote code execution by modyfying the contents of said partitions: a script, [a configuration file](https://www.rsyslog.com/doc/configuration/modules/omprog.html) or even a data file if a vulnerability is found in its parser.
+* If it is partially signed and encrypted, say if the bootloader, kernel and the main RO filesystem are signed but there are additional RW partitions that are not encrypted then it's sometimes possible to achieve remote code execution by modifying the contents of said partitions: a script, [a configuration file](https://www.rsyslog.com/doc/configuration/modules/omprog.html) or even a data file if a vulnerability is found in its parser.
 * If everything is properly signed, then the meaning of "properly" can be challenged. I've found a number of vulnerabilities in custom secure boot implementations by simply reading precisely what they were actually doing and identifying corner cases that could be abused.
 
 After a vulnerability has been identified, it could be necessary to modify the flash's contents and solder it back to the target. Unfortunately my solder paste seems to have lost by the carrier. This might be covered in a part two later on.
