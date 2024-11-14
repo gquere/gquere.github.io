@@ -37,7 +37,7 @@ Do not try to pry the chip off as this will undoubtedly rip some pads off and mi
 
 If some of the solder balls have melted together and formed blobs on the underside of chip they will need to be removed using solder wick. But in any case it's still a good practice not to skip this step. Clean the old flux using isopropyl alcohol, apply new flux and drag a strip of wick accross the chip using a soldering iron until no more bumps/grits are felt on the chip. If you have leaded solder lying around (you should!) it's always easier to add some to the area you're trying to clean because it has a lower melting point and better viscosity. It will mix with the old RoHS-compliant solder which makes the cleaning process much easier.
 
-At this point you should have a chip looking more or so like this, I've scratched mine quite a lot when cleaning it with the wick but that's no big deal:
+At this point you should have a chip looking more or so like this, I've scratched mine quite a lot when cleaning it with the wick but that's no big deal. The careful observer will note that the cleaning procedure wasn't perfect as there is some solder left on a few pads, visible as tiny domes for instance in the bottom left part of the picture. Again, no big deal.
 ![Cleaned chip](./nand_chip_off/cleaned_chip.JPG)
 
 Lets put it in the XGecu T48 reader. On the chip there is a dot in a corner which indicates pin 1, it's barely visible on the picture but it's there! This dot should be aligned with the arrow inside the socket:
