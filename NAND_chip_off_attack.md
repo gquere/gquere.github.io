@@ -19,7 +19,7 @@ These are the tools used for the attack:
 
 * A 1200x digital microscope with integrated display: 30.19€
 * A 858D hot air station: 35.95€
-* An official XGecu T46 programmer and a BGA153 adapter: 96.33€
+* An official XGecu T48 programmer and a BGA153 adapter: 96.33€
 * Some flux, better grab it in a tube for easier application: 1.76€
 * Low temperature reballing solder paste: 2.78€
 * A reballing BGA153 stencil: 2.53€
@@ -43,7 +43,7 @@ At this point you should have a chip looking more or so like this, I've scratche
 Lets put it in the XGecu T48 reader. On the chip there is a dot in a corner which indicates pin 1, it's barely visible on the picture but it's there! This dot should be aligned with the arrow inside the socket:
 ![Arrow and dot on chip](./nand_chip_off/arrow_dot.jpg)
 
-I don't really trust the software provided with the T48. I've had no success attaching the reader to a virtual machine, the driver didn't seem to work in the VM and the XGecu was appearing with an error (yellow triangle) in Windows' device manager. So I just used an offline laptop that never connects to the internet. Otherwise there is this cool open source project which I haven't tried yet: [minipro by David Griffith](https://gitlab.com/DavidGriffith/minipro) but it seems like he's mostly focused on older readers for now with support for the T46/56 being marked as experimental.
+I don't really trust the software provided with the T48. I've had no success attaching the reader to a virtual machine, the driver didn't seem to work in the VM and the XGecu was appearing with an error (yellow triangle) in Windows' device manager. So I just used an offline laptop that never connects to the internet. Otherwise there is this cool open source project which I haven't tried yet: [minipro by David Griffith](https://gitlab.com/DavidGriffith/minipro) but it seems like he's mostly focused on older readers for now with support for the T48/56 being marked as experimental.
 
 This is what it looks like if no programmer is detected (that's bad):
 ![No programmer detected XGecu](./nand_chip_off/no_programmer_detected.png)
