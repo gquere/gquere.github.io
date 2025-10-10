@@ -12,7 +12,7 @@ The problem for reversers is that this actually creates a split in the code that
 The solution is rather straightforward if you know what you're looking for: U-Boot has a table of function pointers for all its high-level script commands; we're going to find this table and instruct IDA to create all the functions it's pointing to.
 
 First, create a structure in the "local types" window:
-```C
+```c
 struct cmd_tbl_s
 {
   char *name;
