@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [IDA reversing tips for reversing embedded U-Boot](./IDA_tips_for_reversing_uboot.md)
 * [NAND dumping part 1: The cost of a NAND chip off attack is 170.83€](./NAND_chip_off_attack.md)
 * [A case of missing bytes: bruteforcing your way through Jenkins' CVE-2024-23897](./bruteforcing_CVE-2024-23897.md)
 * [Dependency Confusions in Docker](./DockerDependencyConfusion.md)
