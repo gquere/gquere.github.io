@@ -27,7 +27,7 @@ struct cmd_tbl_s
 
 Finding the table is easy since it's guaranteed to contain pointers to strings representing the actual commands. Go to the "strings" window (SHIFT+F12) and look for the ```base``` command help (this is just one of many commands, we're using this one because the table is sorted alphabetically but we might have used ```bootm``` for instance). Copy the string's address, in my case 0x90831531, and search this sequence of bytes (ALT+B), this will land you somewhere in the table. Depending on the number of commands implemented you might have to go up a bit to find the actual start of the table. Once there define the type (Y) then create an array of the appropriate size (**):
 
-The table of structure when it has been mapped to the address in ROM:
+The table of U-Boot command structures when it has been mapped to the address in ROM:
 ![table](./IDA_tips/table_created.png)
 
 Finally we're going to use this IDA9 script in the script console (SHIFT+F2) to iterate over each structure, creating and naming the function (beware, the API completely changed between 8 and 9):
