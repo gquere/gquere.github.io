@@ -4,20 +4,20 @@ title: IDA tips for reversing U-Boot
 
 Tip #1: Auto-discovering code
 =============================
-After it has initialized the necessary peripherals, U-Boot relies on startup scripts to actually decide how to boot. This lets developpers load or edit their scripts without having to recompile everything and allows to see things from a much-appreciated higher-level script language rather than plain C.
+After it has initialized the necessary peripherals, U-Boot relies on startup scripts to actually decide how to boot. This lets developers load or edit their scripts without having to recompile everything and allows seeing things from a much-appreciated higher-level script language rather than plain C.
 
 The problem for reversers is that this actually creates a split in the code that will make 90% of the codepath unreachable from the main function, which is all that IDA can discover from the reset vector. Thus, this is what IDA leaves you with after you let it auto-discover a new U-Boot project:
 ![undiscovered](./IDA_tips/unexplored.png)
 
-The solution is rather straightforward if you know what you're looking for: U-Boot has a table of function pointers for all it's high-level script commands; we're going to find this table and instruct IDA to create all the functions it's pointing to.
+The solution is rather straightforward if you know what you're looking for: U-Boot has a table of function pointers for all its high-level script commands; we're going to find this table and instruct IDA to create all the functions it's pointing to.
 
 First, create a structure in the "local types" window:
-```
+```C
 struct cmd_tbl_s
 {
   char *name;
   int maxargs;
-  void *(__fastcall *arg_handler)();    // this depends on your uboot implementation, sometimes (most times) it's an integer
+  void *(__fastcall *arg_handler)();    // this depends on your U-Boot implementation, sometimes (most times) it's an integer
   int *(__fastcall *cmd)(struct cmd_tbl_s *, int, int, char *const []);
   char *usage;
   char *help;
@@ -25,12 +25,12 @@ struct cmd_tbl_s
 };
 ```
 
-Finding the table is easy since it's guaranteed to contain pointer to strings representing the actual commands. Go to the "strings" window (MAJ+F12) and look for the ```base``` command help (this is just one of many commands, we're using this one because the table is sorted alphabetically but we might have used ```bootm``` for instance). Copy the string's address, in my case 0x90831531 and search this sequence of bytes (ALT+B), this will land you somewhere in the table. Depending on the number of commands implemented you might have to go up a bit to find the actual start of the table. Once there define the type (Y) then create an array of the appropriate size (**):
+Finding the table is easy since it's guaranteed to contain pointers to strings representing the actual commands. Go to the "strings" window (SHIFT+F12) and look for the ```base``` command help (this is just one of many commands, we're using this one because the table is sorted alphabetically but we might have used ```bootm``` for instance). Copy the string's address, in my case 0x90831531, and search this sequence of bytes (ALT+B), this will land you somewhere in the table. Depending on the number of commands implemented you might have to go up a bit to find the actual start of the table. Once there define the type (Y) then create an array of the appropriate size (**):
 
 The table of structure when it has been mapped to the address in ROM:
 ![table](./IDA_tips/table_created.png)
 
-Finaly we're going to use this IDA9 script in the script console (MAJ+F2) to iterate over each structure, creating and naming the function (beware, the API completely changed between 8 and 9):
+Finally we're going to use this IDA9 script in the script console (SHIFT+F2) to iterate over each structure, creating and naming the function (beware, the API completely changed between 8 and 9):
 ```python
 import idaapi
 import ida_typeinf
@@ -40,7 +40,7 @@ import idc
 # Configuration
 BASE_ADDR = 0x9083FE28      # e.g., 0x90800000 - Replace with actual table start
 NUM_ENTRIES = 73            # Number of command table entries - Adjust as needed
-THUMB_MODE = 1              # Set to 0 if no THUMB mode (will fail otherwise)
+THUMB_MODE = 1              # Set to 0 if no Thumb mode (will fail otherwise)
 
 # Constants
 STRUCT_OFFSET_CMD = 0x0C    # Offset to cmd function pointer, should be constant
@@ -74,27 +74,33 @@ for i in range(NUM_ENTRIES):
 ```
 
 Much better:
+
 ![explored](./IDA_tips/explored.png)
 
-WARNING: the script might fail for several reasons having to do with THUMB mode. If your code is NOT THUMB mode then set THUMB_MODE variable to 0 otherwise it will try to use offsets for THUMB mode and fail. If your code is THUMB mode but the section hasn't been defined as THUMB in IDA then you have to do that manually (ALT+G).
+WARNING: the script might fail for several reasons having to do with Thumb mode. If your code is NOT Thumb mode then set THUMB_MODE variable to 0; otherwise it will try to use offsets for Thumb mode and fail. If your code is Thumb mode but the section hasn't been defined as T=1 in IDA then you have to do that manually (ALT+G).
 
 Tip #2: Auto-discovering and creating crypto tables
 ===================================================
 
-Another thing that might help speed up the reversing process is finding hardcoded crypto lookup tables. This is traditionnally done using David Berard's findcrypt but the patterns aren't complete and it doesn't create tables so I [forked his project](https://github.com/gquere/findcrypt-yara-autocreate) to do just that. It's mostly the same code but supports full table patterns and autocreates them on the fly.
+Another thing that might help speed up the reversing process is finding hardcoded crypto lookup tables. This is traditionally done using David Berard's findcrypt but the patterns aren't complete and it doesn't create tables so I [forked his project](https://github.com/gquere/findcrypt-yara-autocreate) to do just that. It's mostly the same code but supports full table patterns and autocreates them on the fly.
+
 ![windows results](./IDA_tips/findcrypt2.png)
 
-Ain't that nice?
-![autocreated](./IDA_tips/table_created.png)
+Isn't that nice?
+
+![autocreated](./IDA_tips/aes_sbox.png)
 
 Tip #3: Why u no printf?
 ========================
 
 This last one is less of a tip and more of a classic blunder. Sometimes you create a new project, start reversing and find out that Hex-Rays only prints offsets and never points to the actual tables or strings.
+
 ![broken](./IDA_tips/broken_strings.png)
 
 Somehow nobody documented the fix to [this problem online](https://reverseengineering.stackexchange.com/questions/18511/ida-hex-rays-decompiler-show-strings-instead-of-offset), which is that your segment is not defined as RO:
+
 ![segment](./IDA_tips/segments.png)
 
 All fixed now:
+
 ![fixed](./IDA_tips/fixed_strings.png)
