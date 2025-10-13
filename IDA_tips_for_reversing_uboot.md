@@ -6,7 +6,7 @@ Tip #1: Auto-discovering code
 =============================
 After it has initialized the necessary peripherals, U-Boot relies on startup scripts to actually decide how to boot. This lets developers load or edit their scripts without having to recompile everything and allows seeing things from a much-appreciated higher-level script language rather than plain C.
 
-The problem for reversers is that this actually creates a split in the code that will make 90% of the codepath unreachable from the main function, which is all that IDA can discover from the reset vector. Thus, this is what IDA leaves you with after you let it auto-discover a new U-Boot project:
+The problem for reversers is that this actually creates a split in the code that will make 90% of the codepath unreachable from the main function, which is all that IDA can discover from the reset vector. Thus, this is what IDA leaves you with after you let it auto-discover a new U-Boot project (for some reason this doesn't always happen mind you):
 ![undiscovered](./IDA_tips/unexplored.png)
 
 The solution is rather straightforward if you know what you're looking for: U-Boot has a table of function pointers for all its high-level script commands; we're going to find this table and instruct IDA to create all the functions it's pointing to.
