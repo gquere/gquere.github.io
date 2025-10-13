@@ -97,7 +97,7 @@ This last one is less of a tip and more of a classic blunder. Sometimes you crea
 
 ![broken](./IDA_tips/broken_strings.png)
 
-Somehow nobody documented the fix to [this problem online](https://reverseengineering.stackexchange.com/questions/18511/ida-hex-rays-decompiler-show-strings-instead-of-offset), which is that your segment is not defined as RO:
+Somehow nobody documented the fix to [this problem online](https://reverseengineering.stackexchange.com/questions/18511/ida-hex-rays-decompiler-show-strings-instead-of-offset), which is that your segment is not defined as +R at least (could be +W if you want also):
 
 ![segment](./IDA_tips/segments.png)
 
