@@ -1,5 +1,5 @@
 ---
-title: Privescing a BitLocker + PIN-Encrypted Company Laptop
+title:  Privescing a Laptop with BitLocker + PIN
 ---
 
 ![Another round of TPM sniffing using a DSLogic logic analyzer](./BitLockerPIN/connect.jpg)
