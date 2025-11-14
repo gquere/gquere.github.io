@@ -59,6 +59,7 @@ erlang.cookie
 jnlpUrl .* -secret                        // Jenkins agent
 [^a-zA-Z0-9]eyJhbGc                       // JWT
 [^a-zA-Z0-9]AKCp5                         // Artifactory API token
+cmVmdGtuOjAx                              // Artifactory Access Token "reftkn:01"
 ```
 
 Copy and paste regexp:
