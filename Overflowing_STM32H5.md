@@ -210,8 +210,8 @@ That's very easy — all that is needed is to write 0 to MPU_CTRL at address 0xE
 Then just append the shellcode and you're done!
 
 
-Protecting against ROP
-======================
+Protecting against ROM ROP
+==========================
 
 What made this attack work is that the "public" ROM code was used to build a ROP chain. The way to protect against this is to unmap this region when setting the MPU. This is done by defining all needed regions (that is at least code, SRAM and peripherals) and then making all other regions inaccessible.
 
