@@ -2,6 +2,7 @@
 title: Home
 ---
 
+* [EMFI adventures part 2: Target characterization of a STM32H5](./EM_Fault_Injection_STM32H5.md)
 * [EMFI adventures part 1: Getting into EMFI for 30€ thanks to globalization](./EMFI_basics.md)
 * [ROP the ROM: Exploiting a Stack Buffer Overflow on STM32H5 in Multiple Ways](./Overflowing_STM32H5.md)
 * [Privescing a Laptop with BitLocker + PIN](./Bitlocker_TPM_and_PIN_privesc.md)
